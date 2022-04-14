@@ -15,7 +15,7 @@
 ## Requirement #02
 **Type:** Functional
 
-**Description:** The game should allow a fixed camera stage where the user can walk around a rectangal properly
+**Description:** The game should allow a fixed camera stage where the user can walk around a rectangle properly
 
 **Rationale:** This is fundamental to the base game
 
@@ -31,9 +31,9 @@
 
 **Description:** The game should allow the user to have consistent controls where walking around a wall "pre buffers" the previous input
 
-**Rationale:** Neccesary for an intuitive experience
+**Rationale:** Necessary for an intuitive experience
 
-**Fit Criterion:** User can hold arrow direction of previous surface to walk down on other surface for a short period of time
+**Fit Criterion:** User can hold arrow direction of the previous surface to walk down on another surface for a short period of time
 
 **Priority:** High
 
@@ -43,11 +43,11 @@
 ## Requirement #04
 **Type:** Functional
 
-**Description:** The game should have a destruction system where the floor is destructable and triggered by certain events
+**Description:** The game should have a destruction system where the floor is destructible and triggered by certain events
 
-**Rationale:** Will be neccesary for implementing enemies in the game
+**Rationale:** It will be necessary for implementing enemies in the game
 
-**Fit Criterion:** Events can trigger destruction of objects.
+**Fit Criterion:** Events can trigger the destruction of objects.
 
 **Priority:** Essential
 
@@ -61,7 +61,7 @@
 
 **Rationale:** Fundamental to the base
 
-**Fit Criterion:** Enemies can freely move around inside box, but only a single direction when outside the box.
+**Fit Criterion:** Enemies can freely move around inside the box, but only in a single direction when outside the box.
 
 **Priority:** Essential
 
@@ -87,7 +87,7 @@
 
 **Description:** Enemy AI does not overload system resources
 
-**Rationale:** Using too much of the system could cause problems especially when introducing multiplayer
+**Rationale:** Using too much of the system could cause problems, especially when introducing multiplayer
 
 **Fit Criterion:** The game should run with very little CPU usage 
 
@@ -101,9 +101,9 @@
 
 **Description:** Introduce game UI to start, pause, and end game.
 
-**Rationale:** Needed for options menu and other parts of game. Helps overal intuivitness
+**Rationale:** Needed for options menu and other parts of the game. Helps overall intuitiveness
 
-**Fit Criterion:** UI can access all parts of game without getting trapped
+**Fit Criterion:** UI can access all parts of the game without getting trapped
 
 **Priority:** Medium
 
@@ -115,9 +115,9 @@
 
 **Description:** The game allows for some basic game personalization, such as graphics and controls
 
-**Rationale:** Will help people on less performant systems and to adjust controls accordingly
+**Rationale:** Will help people on less performant systems and adjust controls accordingly
 
-**Fit Criterion:** User can easily change game options
+**Fit Criterion:** Users can easily change game options
 
 **Priority:** Low
 
@@ -131,7 +131,7 @@
 
 **Rationale:** Necessary to avoid enemies and make the game playable
 
-**Fit Criterion:** Player can jump up and down using character movement component
+**Fit Criterion:** Player can jump up and down using the character movement component
 
 **Priority:** Essential
 
@@ -141,7 +141,7 @@
 ## Requirement #11
 **Type:** Functional
 
-**Description:** Allow jump mechanic around corners of stage
+**Description:** Allow jump mechanic around corners of the stage
 
 **Rationale:** Necessary to avoid enemies and stay on walls.
 
@@ -159,7 +159,7 @@
 
 **Rationale:** Timer is needed to determine who moves onto the next stage
 
-**Fit Criterion:** Timer runs out and game ends (for a minimum viable product)
+**Fit Criterion:** Timer runs out and the game ends (for a minimum viable product)
 
 **Priority:** High
 
@@ -169,7 +169,7 @@
 ## Requirement #13
 **Type:** Functional
 
-**Description:** Introduce dedicated server
+**Description:** Introduce a dedicated server
 
 **Rationale:** Required for the multiplayer side of the game to work
 
@@ -183,7 +183,7 @@
 ## Requirement #14
 **Type:** Performance / Robustness or Fault-Tolerance
 
-**Description:** Make character and enemy components with client side prediction
+**Description:** Make character and enemy components with client-side prediction
 
 **Rationale:** Will be necessary for making the multiplayer work effectively
 
@@ -197,11 +197,11 @@
 ## Requirement #15
 **Type:** Functional
 
-**Description:** Make event on server for losing life
+**Description:** Make event on the server for losing life
 
 **Rationale:** In order to control the online aspect of the game, we need to have a way to track which players are dead and alive
 
-**Fit Criterion:** Getting hit by enemy should cause you to lose the game
+**Fit Criterion:** Getting hit by an enemy should cause you to lose the game
 
 **Priority:** Essential
 
@@ -211,7 +211,7 @@
 ## Requirement #16
 **Type:** Security
 
-**Description:** Create dedicated server using reliable company
+**Description:** Create a dedicated server using a reliable company
 
 **Rationale:** Compromised servers can cause future complications
 
@@ -225,7 +225,7 @@
 ## Requirement #17
 **Type:** Scalability or Extensibility
 
-**Description:** Seperate all movement functionality
+**Description:** Separate all movement functionality
 
 **Rationale:** Allows different movement functionality for different stages and future development
 
@@ -239,9 +239,9 @@
 ## Requirement #18
 **Type:** Functional
 
-**Description:** Create general gameloop
+**Description:** Create general game loop
 
-**Rationale:** Neccessary for entire game to function as one thing
+**Rationale:** Necessary for entire game to function as one thing
 
 **Fit Criterion:** After each level, it progresses to the next until there is one player left. Once he wins, everyone is returned to the menu
 
