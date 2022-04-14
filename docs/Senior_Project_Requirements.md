@@ -169,110 +169,110 @@
 ## Requirement #13
 **Type:** Functional
 
-**Description:** 
+**Description:** Introduce dedicated server
 
-**Rationale:** 
+**Rationale:** Required for the multiplayer side of the game to work
 
-**Fit Criterion:** 
+**Fit Criterion:** The game should use a dedicated server to manage up to 40 clients
 
-**Priority:** 
+**Priority:** Essential
 
-**Dependencies:** 
+**Dependencies:** Requirement #01 and Requirement #10
 
 
 ## Requirement #14
-**Type:** 
+**Type:** Performance / Robustness or Fault-Tolerance
 
-**Description:** 
+**Description:** Make character and enemy components with client side prediction
 
-**Rationale:** 
+**Rationale:** Will be necessary for making the multiplayer work effectively
 
-**Fit Criterion:** 
+**Fit Criterion:** Server can manage up to 40 clients
 
-**Priority:** 
+**Priority:** High
 
-**Dependencies:** 
+**Dependencies:** Requirement #13
 
 
 ## Requirement #15
-**Type:** 
+**Type:** Functional
 
-**Description:** 
+**Description:** Make event on server for losing life
 
-**Rationale:** 
+**Rationale:** In order to control the online aspect of the game, we need to have a way to track which players are dead and alive
 
-**Fit Criterion:** 
+**Fit Criterion:** Getting hit by enemy should cause you to lose the game
 
-**Priority:** 
+**Priority:** Essential
 
-**Dependencies:** 
+**Dependencies:** Requirement #12
 
 
 ## Requirement #16
-**Type:** 
+**Type:** Security
 
-**Description:** 
+**Description:** Create dedicated server using reliable company
 
-**Rationale:** 
+**Rationale:** Compromised servers can cause future complications
 
-**Fit Criterion:** 
+**Fit Criterion:** Server should be trustworthy with a good reputation to avoid user data leaks
 
-**Priority:** 
+**Priority:** High
 
-**Dependencies:** 
+**Dependencies:** Requirement #13
 
 
 ## Requirement #17
-**Type:** 
+**Type:** Scalability or Extensibility
 
-**Description:** 
+**Description:** Seperate all movement functionality
 
-**Rationale:** 
+**Rationale:** Allows different movement functionality for different stages and future development
 
-**Fit Criterion:** 
+**Fit Criterion:** The character movement component can be fit into any game
 
-**Priority:** 
+**Priority:** Medium
 
-**Dependencies:** 
+**Dependencies:** Requirement #02 and Requirement #01
 
 
 ## Requirement #18
-**Type:** 
+**Type:** Functional
 
-**Description:** 
+**Description:** Create general gameloop
 
-**Rationale:** 
+**Rationale:** Neccessary for entire game to function as one thing
 
-**Fit Criterion:** 
+**Fit Criterion:** After each level, it progresses to the next until there is one player left. Once he wins, everyone is returned to the menu
 
-**Priority:** 
+**Priority:** High
 
-**Dependencies:** 
+**Dependencies:** Requirement #13
 
 
 ## Requirement #19
-**Type:** 
+**Type:** Look and Feel / Appearance
 
-**Description:** 
+**Description:** Implement cel shader
 
-**Rationale:** 
+**Rationale:** Important for turning a 3D game into an easy to comprehend side scroller game.
 
-**Fit Criterion:** 
+**Fit Criterion:** Cel shader works on characters as well as environments.
 
-**Priority:** 
+**Priority:** low
 
-**Dependencies:** 
+**Dependencies:** (none)
 
 
 ## Requirement #20
-**Type:** 
+**Type:** Look and Feel / Style
 
-**Description:** 
+**Description:** Replace all temporary meshes and models with consistently themed assets
 
-**Rationale:** 
+**Rationale:** Needed to style the game accordingly
 
-**Fit Criterion:** 
+**Fit Criterion:** All assets are redone with proper game assets
 
-**Priority:** 
+**Priority:** low
 
-**Dependencies:** 
+**Dependencies:** Requirement #19
