@@ -1,483 +1,278 @@
-Requirement #01
-===============
+## Requirement #01
+**Type:** Functional
 
-**Type:** 
-Functional
+**Description:** The game should extend the character movement component to add additional functionality
 
-**Description:** 
-The module should keep a record of past game states.
+**Rationale:** This is fundamental to the base game movement
 
-**Rationale:** 
-This is an essential component of rollback netcode.
+**Fit Criterion:** A character can use this movement component and the new features it offers
 
-**Fit Criterion:** 
-The module can keep track of at least 20 frames of past game states.
+**Priority:** Essential
 
-**Priority:** 
-Essential
+**Dependencies:** (none)
 
-**Dependencies:** 
-(none)
 
-Requirement #02
-===============
+## Requirement #02
+**Type:** Functional
 
-**Type:** 
-Performance / Speed and Latency
+**Description:** The game should allow a fixed camera stage where the user can walk around a rectangle properly
 
-**Description:** 
-The module should have adequate performance when keeping a record of game state
-data.
+**Rationale:** This is fundamental to the base game
 
-**Rationale:** 
-If the process of saving game state data slows down the game performance, then
-the benefits of rollback are lost.
+**Fit Criterion:** A character can walk around the map fully with the gravity changing properly
 
-**Fit Criterion:** 
-Test projects with reasonable complexity are not slowed down when the module is
-active.
+**Priority:** Essential
 
-**Priority:** 
-Essential
+**Dependencies:** (none)
 
-**Dependencies:** 
-Requirement #01
 
-Requirement #03
-===============
+## Requirement #03
+**Type:** Functional / Usability
 
-**Type:** 
-Capacity
+**Description:** The game should allow the user to have consistent controls where walking around a wall "pre buffers" the previous input
 
-**Description:** 
-The user should be able to specify the amount of past frames kept, up to five
-seconds' worth.
+**Rationale:** Necessary for an intuitive experience
 
-**Rationale:** 
-The ability to keep track of past game states may be useful for more than just
-rollback netcode, so Essential settings for this may be useful. Lower settings
-may also help improve performance on weak hardware.
+**Fit Criterion:** User can hold arrow direction of the previous surface to walk down on another surface for a short period of time
 
-**Fit Criterion:** 
-The module has a setting to save variable amounts of game state data, up to
-300 ticks (five seconds in many games).
+**Priority:** High
 
-**Priority:** 
-High
+**Dependencies:** Requirement #02 and Requirement #01
 
-**Dependencies:** 
-Requirement #01
 
-Requirement #04
-===============
+## Requirement #04
+**Type:** Functional
 
-**Type:** 
-Functional
+**Description:** The game should have a destruction system where the floor is destructible and triggered by certain events
 
-**Description:** 
-The module's past game state data should be exposed to the user.
+**Rationale:** It will be necessary for implementing enemies in the game
 
-**Rationale:** 
-Accessing past game state data may be useful for certain game mechanics, such
-as rewinding to the recent past in a time travel game.
+**Fit Criterion:** Events can trigger the destruction of objects.
 
-**Fit Criterion:** 
-The module has a function to retrieve data on a game object from a specified
-amount of time in the past.
+**Priority:** Essential
 
-**Priority:** 
-High
+**Dependencies:** Requirement #02
 
-**Dependencies:** 
-Requirement #01
 
-Requirement #05
-===============
+## Requirement #05
+**Type:** Functional
 
-**Type:** 
-Functional
+**Description:** Enemies (animals) are added to the base game
 
-**Description:** 
-The module should have functionality to roll back and resimulate the game state
-according to the conventions of rollback.
+**Rationale:** Fundamental to the base
 
-**Rationale:** 
-This is an essential component of rollback netcode.
+**Fit Criterion:** Enemies can freely move around inside the box, but only in a single direction when outside the box.
 
-**Fit Criterion:** 
-The module emits different [signals](https://docs.godotengine.org/en/latest/getting_started/step_by_step/signals.html) for rolling back time and resimulating game
-ticks; when rolling back, it also automatically handles the restoration of the
-tracked game state data.
+**Priority:** Essential
 
-**Priority:** 
-Essential
+**Dependencies:** Requirement #02
 
-**Dependencies:** 
-Requirement #01
 
-Requirement #06
-===============
+## Requirement #06
+**Type:** Functional
 
-**Type:** 
-Performance / Speed and Latency
+**Description:** Enemies can break blocks from the ground
 
-**Description:** 
-The process of rolling back the game state should have acceptable performance.
+**Rationale:** Will introduce a challenge to the game where you are required to keep them in
 
-**Rationale:** 
-If this has poor performance, the benefits of rollback are lost.
+**Fit Criterion:** Enemies can use the destruction system to break blocks when they touch them from the inside, not the outside.
 
-**Fit Criterion:** 
-Rolling back to a previous frame does not cause game lag in a reasonable test
-project.
+**Priority:** Essential
 
-**Priority:** 
-Essential
+**Dependencies:** Requirement #05 and Requirement #04
 
-**Dependencies:** 
-Requirement #05
 
-Requirement #07
-===============
+## Requirement #07
+**Type:** Performance
 
-**Type:** 
-Functional
+**Description:** Enemy AI does not overload system resources
 
-**Description:** 
-The module should include networking capabilities to enable online multiplayer
-between two clients.
+**Rationale:** Using too much of the system could cause problems, especially when introducing multiplayer
 
-**Rationale:** 
-This is an essential component of rollback netcode.
+**Fit Criterion:** The game should run with very little CPU usage 
 
-**Fit Criterion:** 
-The module can connect to another client running the same software and exchange
-packets containing input data using Godot's built-in network features.
+**Priority:** High
 
-**Priority:** 
-Essential
+**Dependencies:** Requirement #05
 
-**Dependencies:** 
-Requirement #01, Requirement #05, Requirement #17
 
-Requirement #08
-===============
+## Requirement #08
+**Type:** Usability / Ease of Use
 
-**Type:** 
-Usability / Learning
+**Description:** Introduce game UI to start, pause, and end game.
 
-**Description:** 
-The module should be intuitive and user-friendly.
+**Rationale:** Needed for options menu and other parts of the game. Helps overall intuitiveness
 
-**Rationale:** 
-If the module is difficult for existing Godot users to make use of, it will be
-detrimental to the goals of the project.
+**Fit Criterion:** UI can access all parts of the game without getting trapped
 
-**Fit Criterion:** 
-The module's exposed, user-facing functions follow the [Godot style guide](https://docs.godotengine.org/en/stable/getting_started/scripting/gdscript/gdscript_styleguide.html) and
-are generally intuitive to use for existing Godot users.
+**Priority:** Medium
 
-**Priority:** 
-High
+**Dependencies:** (none)
 
-**Dependencies:** 
-Requirements #01-07
 
-Requirement #09
-===============
+## Requirement #09
+**Type:** Personalization
 
-**Type:** 
-Performance / Precision or Accuracy
+**Description:** The game allows for some basic game personalization, such as graphics and controls
 
-**Description:** 
-The module should be able to handle floating point errors across different
-hardware.
+**Rationale:** Will help people on less performant systems and adjust controls accordingly
 
-**Rationale:** 
-Due to differences in how floating point numbers are calculated on different
-types of computer, keeping them in check is essential for functioning
-netcode. Otherwise, the game state could drift out of sync.
+**Fit Criterion:** Users can easily change game options
 
-**Fit Criterion:** 
-If necessary, the module provides functionality to round floating point numbers
-every frame, or to sync values between the two clients to correct minor
-rounding errors. Research will be needed to determine which is better, or if
-either is necessary at all.
+**Priority:** Low
 
-**Priority:** 
-High
+**Dependencies:** Requirement #08
 
-**Dependencies:** 
-Requirement #07
 
-Requirement #10
-===============
+## Requirement #10
+**Type:** Functional
 
-**Type:** 
-Release
+**Description:** Introduce jump mechanic
 
-**Description:** 
-The module should be released as an open-source project.
+**Rationale:** Necessary to avoid enemies and make the game playable
 
-**Rationale:** 
-This way, users can add the module to their projects and modify it for specific
-use cases.
+**Fit Criterion:** Player can jump up and down using the character movement component
 
-**Fit Criterion:** 
-The module is released on GitHub.
+**Priority:** Essential
 
-**Priority:** 
-High
+**Dependencies:** Requirement #01
 
-**Dependencies:** 
-The completion of the project
 
-Requirement #11
-===============
+## Requirement #11
+**Type:** Functional
 
-**Type:** 
-Security / Privacy
+**Description:** Allow jump mechanic around corners of the stage
 
-**Description:** 
-The module should not expose users to data leaks.
+**Rationale:** Necessary to avoid enemies and stay on walls.
 
-**Rationale:** 
-Leaking personal information is bad.
+**Fit Criterion:** Player can freely jump around the corner of the stage
 
-**Fit Criterion:** 
-The module cannot be exploited to retrieve any non-game-related data from
-another player during network play.
+**Priority:** Essential
 
-**Priority:** 
-High
+**Dependencies:** Requirement #01 and Requirement #10
 
-**Dependencies:** 
-Requirement #07
 
-Requirement #12
-===============
+## Requirement #12
+**Type:** Functional
 
-**Type:** 
-Performance / Robustness or Fault-Tolerance
+**Description:** Introduce timer for each stage
 
-**Description:** 
-The module should be able to handle cases where the other player loses
-connection in network play.
+**Rationale:** Timer is needed to determine who moves onto the next stage
 
-**Rationale:** 
-It's not uncommon for players to suddenly disconnect during an online game;
-having a predictable way to handle this will be vital.
+**Fit Criterion:** Timer runs out and the game ends (for a minimum viable product)
 
-**Fit Criterion:** 
-The module is able to detect when the other player takes too long to send a
-packet, and then stop the online session. It also emits a signal when the other
-player times out so that the game developer can handle it.
+**Priority:** High
 
-**Priority:** 
-High
+**Dependencies:** (none)
 
-**Dependencies:** 
-Requirement #07
 
-Requirement #13
-===============
+## Requirement #13
+**Type:** Functional
 
-**Type:** 
-Usability / Personalization
+**Description:** Introduce a dedicated server
 
-**Description:** 
-The module's functionality should be clearly documented.
+**Rationale:** Required for the multiplayer side of the game to work
 
-**Rationale:** 
-The easier it is to understand how to use the module, the better.
+**Fit Criterion:** The game should use a dedicated server to manage up to 40 clients
 
-**Fit Criterion:** 
-Clear documentation is included regarding how to use the module in a game. The
-module's source code is clearly explained using comments.
+**Priority:** Essential
 
-**Priority:** 
-High
+**Dependencies:** Requirement #01 and Requirement #10
 
-**Dependencies:** 
-The completion of the project
 
-Requirement #14
-===============
+## Requirement #14
+**Type:** Performance / Robustness or Fault-Tolerance
 
-**Type:** 
-Functional
+**Description:** Make character and enemy components with client-side prediction
 
-**Description:** 
-The module should be able to retrieve the latency of the current network
-connection.
+**Rationale:** Will be necessary for making the multiplayer work effectively
 
-**Rationale:** 
-Ping information is very useful in online games; it can warn players about
-a bad connection, for example, prompting them to perhaps find a different
-opponent.
+**Fit Criterion:** Server can manage up to 40 clients
 
-**Fit Criterion:** 
-The module has an exposed function which returns the ping time of the current
-network connection.
+**Priority:** High
 
-**Priority:** 
-Medium
+**Dependencies:** Requirement #13
 
-**Dependencies:** 
-Requirement #07
 
-Requirement #15
-===============
+## Requirement #15
+**Type:** Functional
 
-**Type:** 
-Functional
+**Description:** Make event on the server for losing life
 
-**Description:** 
-The module should provide a way to communicate miscellaneous information to the
-other client during an online session.
+**Rationale:** In order to control the online aspect of the game, we need to have a way to track which players are dead and alive
 
-**Rationale:** 
-Communicating information besides inputs is often very important. For example,
-sending information about the other player's username allows it to be displayed
-ingame.
+**Fit Criterion:** Getting hit by an enemy should cause you to lose the game
 
-**Fit Criterion:** 
-The module has an exposed function which adds extra data to be sent alongside
-input information, in the next packet. Whenever it receives extra data from the
-client, it emits a signal containing the data, which the rest of the game code
-can receive and process.
+**Priority:** Essential
 
-**Priority:** 
-Medium
+**Dependencies:** Requirement #12
 
-**Dependencies:** 
-Requirement #07
 
-Requirement #16
-===============
+## Requirement #16
+**Type:** Security
 
-**Type:** 
-Functional
+**Description:** Create a dedicated server using a reliable company
 
-**Description:** 
-The module should provide a way for the user to specify a variable in the
-game's state data as a check for desyncs.
+**Rationale:** Compromised servers can cause future complications
 
-**Rationale:** 
-Often, games which use this type of netcode (where only input data is sent back
-and forth, and calculations such as physics are handled locally by each client)
-will transmit a small amount of game state data to ensure that both clients are
-in sync regarding their individual local calculations. For example, if the data
-for a character's position is different between the two clients, then the game
-knows that they have drifted out of sync, and it can end the game early and
-throw a desync error.
+**Fit Criterion:** Server should be trustworthy with a good reputation to avoid user data leaks
 
-**Fit Criterion:** 
-The module has an exposed function to set a specific variable (or combination
-of variables) as the desync check, and will then send it in packets and compare
-against the other client's value. It emits a signal when a desync is detected.
+**Priority:** High
 
-**Priority:** 
-Medium
+**Dependencies:** Requirement #13
 
-**Dependencies:** 
-Requirement #07
 
-Requirement #17
-===============
+## Requirement #17
+**Type:** Scalability or Extensibility
 
-**Type:** 
-Functional
+**Description:** Separate all movement functionality
 
-**Description:** 
-The module should allow clients to connect via IP.
+**Rationale:** Allows different movement functionality for different stages and future development
 
-**Rationale:** 
-Connecting via IP is the simplest way to connect for game testing purposes. The
-user can then implement server-based matchmaking and feed the resulting IP into
-the module.
+**Fit Criterion:** The character movement component can be fit into any game
 
-**Fit Criterion:** 
-The module has an exposed function to start a new session and try to connect to
-another client at a given IP address.
+**Priority:** Medium
 
-**Priority:** 
-Essential
+**Dependencies:** Requirement #02 and Requirement #01
 
-**Dependencies:** 
-Requirement #07
 
-Requirement #18
-===============
+## Requirement #18
+**Type:** Functional
 
-**Type:** 
-Usability / Ease of Use
+**Description:** Create general game loop
 
-**Description:** 
-The module should present itself as a wrapped-up "class" that can easily be
-used in game code.
+**Rationale:** Necessary for entire game to function as one thing
 
-**Rationale:** 
-Framing the module as an object in code will make it very easy to use and
-understand.
+**Fit Criterion:** After each level, it progresses to the next until there is one player left. Once he wins, everyone is returned to the menu
 
-**Fit Criterion:** 
-The module is implemented as a class in Godot which can be instanced, and
-whose functions can be called to perform all of the module's functionality.
+**Priority:** High
 
-**Priority:** 
-High
+**Dependencies:** Requirement #13
 
-**Dependencies:** 
-(none)
 
-Requirement #19
-===============
+## Requirement #19
+**Type:** Look and Feel / Appearance
 
-**Type:** 
-Maintainability and Support
+**Description:** Implement cel shader
 
-**Description:** 
-The module's code should be clean and easy to maintain.
+**Rationale:** Important for turning a 3D game into an easy to comprehend side scroller game.
 
-**Rationale:** 
-Maintainable code is good and helps extend the life of a project. It makes it
-easier to fix bugs and add features.
+**Fit Criterion:** Cel shader works on characters as well as environments.
 
-**Fit Criterion:** 
-The module's C++ code follows reasonable guidelines for code formatting and
-structure, e.g. [these](https://github.com/cpp-best-practices/cppbestpractices/blob/master/00-Table_of_Contents.md).
+**Priority:** low
 
-**Priority:** 
-High
+**Dependencies:** (none)
 
-**Dependencies:** 
-(none)
 
-Requirement #20
-===============
+## Requirement #20
+**Type:** Look and Feel / Style
 
-**Type:** 
-Functional
+**Description:** Replace all temporary meshes and models with consistently themed assets
 
-**Description:** 
-The module should include functionality for a "read-only" client type, e.g. a
-spectator in a game session.
+**Rationale:** Needed to style the game accordingly
 
-**Rationale:** 
-A spectator feature is common in online games, where you can watch a game you
-aren't participating in. This requirement being met would allow the addition
-of spectator features without introducing unnecessary load from processing the
-spectator client as if it were a player (e.g. receiving meaningless game
-inputs).
+**Fit Criterion:** All assets are redone with proper game assets
 
-**Fit Criterion:** 
-The module can add IP addresses as spectator clients, which do not send inputs;
-they only receive input data (and sync/misc data) for the purpose of keeping a
-local copy of the game state.
+**Priority:** low
 
-**Priority:** 
-Low
-
-**Dependencies:** 
-Requirement #07
+**Dependencies:** Requirement #19
