@@ -15,159 +15,159 @@
 ## Requirement #02
 **Type:** Functional
 
-**Description:** 
+**Description:** The game should allow a fixed camera stage where the user can walk around a rectangal properly
 
-**Rationale:** 
+**Rationale:** This is fundamental to the base game
 
-**Fit Criterion:** 
+**Fit Criterion:** A character can walk around the map fully with the gravity changing properly
 
-**Priority:** 
+**Priority:** Essential
 
-**Dependencies:** 
+**Dependencies:** (none)
 
 
 ## Requirement #03
-**Type:** 
+**Type:** Functional / Usability
 
-**Description:** 
+**Description:** The game should allow the user to have consistent controls where walking around a wall "pre buffers" the previous input
 
-**Rationale:** 
+**Rationale:** Neccesary for an intuitive experience
 
-**Fit Criterion:** 
+**Fit Criterion:** User can hold arrow direction of previous surface to walk down on other surface for a short period of time
 
-**Priority:** 
+**Priority:** High
 
-**Dependencies:** 
+**Dependencies:** Requirement #02 and Requirement #01
 
 
 ## Requirement #04
-**Type:** 
+**Type:** Functional
 
-**Description:** 
+**Description:** The game should have a destruction system where the floor is destructable and triggered by certain events
 
-**Rationale:** 
+**Rationale:** Will be neccesary for implementing enemies in the game
 
-**Fit Criterion:** 
+**Fit Criterion:** Events can trigger destruction of objects.
 
-**Priority:** 
+**Priority:** Essential
 
-**Dependencies:** 
+**Dependencies:** Requirement #02
 
 
 ## Requirement #05
-**Type:** 
+**Type:** Functional
 
-**Description:** 
+**Description:** Enemies (animals) are added to the base game
 
-**Rationale:** 
+**Rationale:** Fundamental to the base
 
-**Fit Criterion:** 
+**Fit Criterion:** Enemies can freely move around inside box, but only a single direction when outside the box.
 
-**Priority:** 
+**Priority:** Essential
 
-**Dependencies:** 
+**Dependencies:** Requirement #02
 
 
 ## Requirement #06
-**Type:** 
+**Type:** Functional
 
-**Description:** 
+**Description:** Enemies can break blocks from the ground
 
-**Rationale:** 
+**Rationale:** Will introduce a challenge to the game where you are required to keep them in
 
-**Fit Criterion:** 
+**Fit Criterion:** Enemies can use the destruction system to break blocks when they touch them from the inside, not the outside.
 
-**Priority:** 
+**Priority:** Essential
 
-**Dependencies:** 
+**Dependencies:** Requirement #05 and Requirement #04
 
 
 ## Requirement #07
-**Type:** 
+**Type:** Performance
 
-**Description:** 
+**Description:** Enemy AI does not overload system resources
 
-**Rationale:** 
+**Rationale:** Using too much of the system could cause problems especially when introducing multiplayer
 
-**Fit Criterion:** 
+**Fit Criterion:** The game should run with very little CPU usage 
 
-**Priority:** 
+**Priority:** High
 
-**Dependencies:** 
+**Dependencies:** Requirement #05
 
 
 ## Requirement #08
-**Type:** 
+**Type:** Usability / Ease of Use
 
-**Description:** 
+**Description:** Introduce game UI to start, pause, and end game.
 
-**Rationale:** 
+**Rationale:** Needed for options menu and other parts of game. Helps overal intuivitness
 
-**Fit Criterion:** 
+**Fit Criterion:** UI can access all parts of game without getting trapped
 
-**Priority:** 
+**Priority:** Medium
 
-**Dependencies:** 
+**Dependencies:** (none)
 
 
 ## Requirement #09
-**Type:** 
+**Type:** Personalization
 
-**Description:** 
+**Description:** The game allows for some basic game personalization, such as graphics and controls
 
-**Rationale:** 
+**Rationale:** Will help people on less performant systems and to adjust controls accordingly
 
-**Fit Criterion:** 
+**Fit Criterion:** User can easily change game options
 
-**Priority:** 
+**Priority:** Low
 
-**Dependencies:** 
+**Dependencies:** Requirement #08
 
 
 ## Requirement #10
-**Type:** 
+**Type:** Functional
 
-**Description:** 
+**Description:** Introduce jump mechanic
 
-**Rationale:** 
+**Rationale:** Necessary to avoid enemies and make the game playable
 
-**Fit Criterion:** 
+**Fit Criterion:** Player can jump up and down using character movement component
 
-**Priority:** 
+**Priority:** Essential
 
-**Dependencies:** 
+**Dependencies:** Requirement #01
 
 
 ## Requirement #11
-**Type:** 
+**Type:** Functional
 
-**Description:** 
+**Description:** Allow jump mechanic around corners of stage
 
-**Rationale:** 
+**Rationale:** Necessary to avoid enemies and stay on walls.
 
-**Fit Criterion:** 
+**Fit Criterion:** Player can freely jump around the corner of the stage
 
-**Priority:** 
+**Priority:** Essential
 
-**Dependencies:** 
+**Dependencies:** Requirement #01 and Requirement #10
 
 
 ## Requirement #12
-**Type:** 
+**Type:** Functional
 
-**Description:** 
+**Description:** Introduce timer for each stage
 
-**Rationale:** 
+**Rationale:** Timer is needed to determine who moves onto the next stage
 
-**Fit Criterion:** 
+**Fit Criterion:** Timer runs out and game ends (for a minimum viable product)
 
-**Priority:** 
+**Priority:** High
 
-**Dependencies:** 
+**Dependencies:** (none)
 
 
 ## Requirement #13
-**Type:** 
+**Type:** Functional
 
 **Description:** 
 
