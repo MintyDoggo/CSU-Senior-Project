@@ -20,7 +20,7 @@ Software: Kontakt 6 Standalone, Kontakt 6 VST3, Ableton Live
 Hardware: Windows 10 PC, 32gb ram, Ryzen 2700 processor.  
 
 ## Project Requirements
-[View Project Requirements](/docs/Senior_Project_Requirements.md)
+[View Project Requirements](./docs/Senior_Project_Requirements.md)
 
 ## Project Implementation Description & Explanation
   ##### This section details the design and features of the in paragraph form with references to the following:
