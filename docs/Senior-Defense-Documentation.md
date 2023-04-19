@@ -28,9 +28,8 @@ Hardware: Windows 10 PC, 32gb ram, Ryzen 2700 processor.
     #####screenshots with numbered captions (e.g., Fig 1. The loading screen.)
     #####a link to the source code repository
 
-## Test Plan
-
-## Test Results
+## Test Plan and Results
+[View Project Requirements](test_plan.md)
 
 ## Challenges Overcome
 
