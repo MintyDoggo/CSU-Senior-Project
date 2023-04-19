@@ -42,7 +42,7 @@ Hardware: Windows 10 PC, 32gb ram, Ryzen 2700 processor.
 
 
 ## Defense Presentation Slides
-
+[View Slides](https://docs.google.com/presentation/d/1cC_gkVYQiNpLZxWM08bVBli_dusfsFnf4SXxsV1A7OM/edit?usp=sharing)
 
 
 
