@@ -29,15 +29,14 @@ Hardware: Windows 10 PC, 32gb ram, Ryzen 2700 processor.
     #####a link to the source code repository
 
 ## Test Plan and Results
-[View Project Requirements](test_plan.md)
+[View Test Plan](test_plan.md)
 
 ## Challenges Overcome
-
-
+The save state and load state features were by far the hardest to implement. Spending weeks on this feature, I finally figured it out and learned a lot about state saving in the process.
 
 ## Future Enhancements
-
-
+Create an easy UI for users to drag and drop their own samples  
+Add more source content (currently 10 unique sounds)
 
 
 ## Defense Presentation Slides
