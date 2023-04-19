@@ -1,0 +1,51 @@
+on init
+    make_perfview
+    message( "" )
+    set_script_title( "MY SCRIPT" )
+    declare $note_will_be_on_when_released
+    declare $current_voices
+    declare $grain_size
+end on
+
+on note
+    if ($PLAYED_VOICES_INST > 0)
+        $current_voices := $PLAYED_VOICES_INST + 1
+        message("Voices: " & $current_voices)
+        $note_will_be_on_when_released := 1
+    end if
+
+    if ($PLAYED_VOICES_INST = 0)
+        $current_voices := $PLAYED_VOICES_INST + 1
+        message("Voices: " & $current_voices)
+        $note_will_be_on_when_released := 0
+    end if
+
+	ignore_event($EVENT_ID)
+	
+	while($NOTE_HELD = 1) 	
+		play_note($EVENT_NOTE,$EVENT_VELOCITY,0,$grain_size)
+		wait($grain_size)
+	end while
+
+end on
+
+{ release callback, executed whenever a note off message is received }
+on release
+    {  }
+    if ($note_will_be_on_when_released = 0)
+        $current_voices := 0
+        message( "released" )
+    end if
+
+    if ($note_will_be_on_when_released = 1 and $PLAYED_VOICES_INST = 2)
+        $current_voices := $PLAYED_VOICES_INST - 1
+        message("Voices: " & $current_voices)
+        $note_will_be_on_when_released := 0
+    end if
+
+    if( $PLAYED_VOICES_INST > 2 )
+        $current_voices := $PLAYED_VOICES_INST - 1
+        message("Voices: " & $current_voices)
+    end if
+
+end on
