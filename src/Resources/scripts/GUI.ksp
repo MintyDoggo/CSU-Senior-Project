@@ -1,0 +1,1333 @@
+macro GUI_INITIALIZE
+
+    // **************************************************************FX TAB**************************************************************
+    
+    // ADSR
+    Engine.ADSRLabel -> text := ""
+    Engine.ADSRLabel -> POS_X := 202
+    Engine.ADSRLabel -> POS_Y := 51
+    Engine.ADSRLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.ADSRLabel -> picture := "/Labels/ADSRLabel2.png"
+
+
+    // ADSR ATTACK KNOB
+    Engine.attackKnob -> DEFAULT_VALUE := 47000
+    Engine.attackKnob -> MOUSE_BEHAVIOUR := 2170
+    Engine.attackKnob -> PICTURE := "/Sliders/Slider100by11"
+    Engine.attackKnob -> value := 47000 //not resetting value on init??
+    Engine.attackKnob -> PARENT_PANEL := Engine.FXPanelID
+    Engine.attackKnob -> POS_X := 202
+    Engine.attackKnob -> POS_Y := Engine.fxTabSpacingY[0]
+
+    // ADD TO SETTINGS
+    GuiCallBacks.settingsSave[1, 0] := Engine.attackKnob 
+
+    Engine.attackLabel -> text := "Attack"
+    Engine.attackLabel -> FONT_TYPE := Engine.initFontFull
+    Engine.attackLabel -> POS_X := 202 - Engine.fxLabelTextOffsetX
+    Engine.attackLabel -> POS_Y := Engine.fxTabSpacingY[0] - Engine.fxLabelAbove
+    Engine.attackLabel -> hide := HIDE_PART_BG
+    Engine.attackLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.attackLabel -> width := 150
+
+	// ADSR DECAY KNOB
+    Engine.decayKnob -> DEFAULT_VALUE := 10000
+    Engine.decayKnob -> MOUSE_BEHAVIOUR := 2170
+    Engine.decayKnob -> PICTURE := "/Sliders/Slider100by11"
+    Engine.decayKnob -> value := 10000 //not resetting value on init??
+    Engine.decayKnob -> PARENT_PANEL := Engine.FXPanelID
+    Engine.decayKnob -> POS_X := 202
+    Engine.decayKnob -> POS_Y := Engine.fxTabSpacingY[1]
+
+    // ADD TO SETTINGS
+    GuiCallBacks.settingsSave[1, 1] := Engine.decayKnob
+
+    Engine.decayLabel -> text := "Decay"
+    Engine.decayLabel -> FONT_TYPE := Engine.initFontFull
+    Engine.decayLabel -> POS_X := 202 - Engine.fxLabelTextOffsetX
+    Engine.decayLabel -> POS_Y := Engine.fxTabSpacingY[1] - Engine.fxLabelAbove
+    Engine.decayLabel -> hide := HIDE_PART_BG
+    Engine.decayLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.decayLabel -> width := 150
+
+	// ADSR SUSTAIN KNOB
+    Engine.sustainKnob -> DEFAULT_VALUE := 1000000
+    Engine.sustainKnob -> MOUSE_BEHAVIOUR := 2170
+    Engine.sustainKnob -> PICTURE := "/Sliders/Slider100by11"
+    Engine.sustainKnob -> value := 1000000 //not resetting value on init??
+    Engine.sustainKnob -> PARENT_PANEL := Engine.FXPanelID
+    Engine.sustainKnob -> POS_X := 202
+    Engine.sustainKnob -> POS_Y := Engine.fxTabSpacingY[2]
+
+    // ADD TO SETTINGS
+    GuiCallBacks.settingsSave[1, 2] := Engine.sustainKnob
+
+    Engine.sustainLabel -> text := "Sustain"
+    Engine.sustainLabel -> FONT_TYPE := Engine.initFontFull
+    Engine.sustainLabel -> POS_X := 202 - Engine.fxLabelTextOffsetX
+    Engine.sustainLabel -> POS_Y := Engine.fxTabSpacingY[2] - Engine.fxLabelAbove
+    Engine.sustainLabel -> hide := HIDE_PART_BG
+    Engine.sustainLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.sustainLabel -> width := 150
+
+	// ADSR RELEASE KNOB
+    Engine.releaseKnob -> DEFAULT_VALUE := 500000
+    Engine.releaseKnob -> MOUSE_BEHAVIOUR := 2170
+    Engine.releaseKnob -> PICTURE := "/Sliders/Slider100by11"
+    Engine.releaseKnob -> value := 500000 //not resetting value on init??
+    Engine.releaseKnob -> PARENT_PANEL := Engine.FXPanelID
+    Engine.releaseKnob -> POS_X := 202
+    Engine.releaseKnob -> POS_Y := Engine.fxTabSpacingY[3]
+
+    // ADD TO SETTINGS
+    GuiCallBacks.settingsSave[1, 3] := Engine.releaseKnob
+
+    Engine.releaseLabel -> text := "Release"
+    Engine.releaseLabel -> FONT_TYPE := Engine.initFontFull
+    Engine.releaseLabel -> POS_X := 202 - Engine.fxLabelTextOffsetX
+    Engine.releaseLabel -> POS_Y := Engine.fxTabSpacingY[3] - Engine.fxLabelAbove
+    Engine.releaseLabel -> hide := HIDE_PART_BG
+    Engine.releaseLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.releaseLabel -> width := 150
+
+
+    // ADSR attack CURVE
+    Engine.attackCurveKnob -> DEFAULT_VALUE := 500000
+    Engine.attackCurveKnob -> MOUSE_BEHAVIOUR := -600
+    Engine.attackCurveKnob -> PICTURE := "/Knobs/AttackCharacterKnob"
+    Engine.attackCurveKnob -> value := 500000 //not resetting value on init??
+    Engine.attackCurveKnob -> PARENT_PANEL := Engine.FXPanelID
+    Engine.attackCurveKnob -> POS_X := 202
+    Engine.attackCurveKnob -> POS_Y := Engine.fxTabSpacingY[4] + 6
+
+    // ADD TO SETTINGS
+    GuiCallBacks.settingsSave[1, 4] := Engine.attackCurveKnob
+
+    Engine.attackCurveLabel -> text := "Attack Curve"
+    Engine.attackCurveLabel -> FONT_TYPE := Engine.initFontFull
+    Engine.attackCurveLabel -> POS_X := 202 - Engine.fxLabelTextOffsetX
+    Engine.attackCurveLabel -> POS_Y := Engine.fxTabSpacingY[4] - Engine.fxLabelAbove - 1
+    Engine.attackCurveLabel -> hide := HIDE_PART_BG
+    Engine.attackCurveLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.attackCurveLabel -> width := 150
+
+    // ADSR Finish Decay Button
+    Engine.finishDecayButton -> DEFAULT_VALUE := 0
+    Engine.finishDecayButton -> TEXT := "Finish Decay"
+    Engine.finishDecayButton -> FONT_TYPE := Engine.initFontFull
+    Engine.finishDecayButton -> DEFAULT_VALUE := 0
+    Engine.finishDecayButton -> hide := HIDE_WHOLE_CONTROL
+
+    // ADD TO SETTINGS
+    GuiCallBacks.settingsSave[1, 6] := Engine.finishDecayButton
+
+    Engine.playbackLabel -> text := ""
+    Engine.playbackLabel -> POS_X := 54
+    Engine.playbackLabel -> POS_Y := 51
+    Engine.playbackLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.playbackLabel -> picture := "/Labels/PlaybackLabel2.png"
+    Engine.playbackLabel -> width := 150
+
+    // CROSSFADE KNOB
+    Engine.crossfadeKnob -> DEFAULT_VALUE := 0
+    Engine.crossfadeKnob -> MOUSE_BEHAVIOUR := 2170
+    Engine.crossfadeKnob -> PICTURE := "/Sliders/Slider100by11-7State"
+    Engine.crossfadeKnob -> value := 500000 //not resetting value on init??
+    Engine.crossfadeKnob -> PARENT_PANEL := Engine.FXPanelID
+    Engine.crossfadeKnob -> POS_X := 54
+    Engine.crossfadeKnob -> POS_Y := Engine.fxTabSpacingY[0]
+
+    Engine.crossfadeKnob := 0
+
+    // ADD TO SETTINGS
+    GuiCallBacks.settingsSave[1, 7] := Engine.crossfadeKnob
+
+    Engine.crossfadeLabel -> text := "Overlap"
+    Engine.crossfadeLabel -> FONT_TYPE := Engine.initFontFull
+    Engine.crossfadeLabel -> POS_X := 54 - Engine.fxLabelTextOffsetX
+    Engine.crossfadeLabel -> POS_Y := Engine.fxTabSpacingY[0] - Engine.fxLabelAbove
+    Engine.crossfadeLabel -> hide := HIDE_PART_BG
+    Engine.crossfadeLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.crossfadeLabel -> width := 150
+
+
+    // Reverse Mode button
+    Engine.reverseModeButton -> DEFAULT_VALUE := 0
+    Engine.reverseModeButton -> PICTURE := "/Buttons/40-40buttonReverse"
+    Engine.reverseModeButton -> value := 0 //not resetting value on init??
+    Engine.reverseModeButton -> PARENT_PANEL := Engine.FXPanelID
+    Engine.reverseModeButton -> text := ""
+    Engine.reverseModeButton -> FONT_TYPE := Engine.initFont
+    Engine.reverseModeButton -> POS_X := 50
+    Engine.reverseModeButton -> POS_Y := Engine.fxTabSpacingY[1] - 14
+
+
+    // ADD TO SETTINGS
+    GuiCallBacks.settingsSave[1, 5] := Engine.reverseModeButton
+
+
+    // STRETCH
+    Engine.stretchLabel -> text := ""
+    Engine.stretchLabel -> POS_X := 54
+    Engine.stretchLabel -> POS_Y := Engine.fxTabSpacingY[2] - Engine.fxLabelAbove - 12
+    Engine.stretchLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.stretchLabel -> picture := "/Labels/StretchLabel2.png"
+    Engine.stretchLabel -> width := 150
+
+    Engine.stretchOnOff -> text := ""
+    Engine.stretchOnOff -> PICTURE := "/Buttons/12-12buttonRadial"
+    Engine.stretchOnOff -> POS_X := 141
+    Engine.stretchOnOff -> POS_Y := Engine.fxTabSpacingY[2] + 7
+    Engine.stretchOnOff -> PARENT_PANEL := Engine.FXPanelID
+    Engine.stretchOnOff -> height := 22
+
+    Engine.stretchSpeedLabel -> text := "Speed"
+    Engine.stretchSpeedLabel -> FONT_TYPE := Engine.initFont
+    Engine.stretchSpeedLabel -> POS_X := 54 - Engine.fxLabelTextOffsetX
+    Engine.stretchSpeedLabel -> POS_Y := Engine.fxTabSpacingY[3] - Engine.fxLabelAbove - 1
+    Engine.stretchSpeedLabel -> hide := HIDE_PART_BG
+    Engine.stretchSpeedLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.stretchSpeedLabel -> width := 150
+
+    Engine.stretchSpeed -> text := ""
+    Engine.stretchSpeed -> PICTURE := "/Sliders/Slider100by11BiPolarDisabled"
+    Engine.stretchSpeed -> POS_X := 54
+    Engine.stretchSpeed -> POS_Y := Engine.fxTabSpacingY[3]
+    Engine.stretchSpeed -> PARENT_PANEL := Engine.FXPanelID
+    Engine.stretchSpeed -> height := 22
+    Engine.stretchSpeed -> DEFAULT_VALUE := 500000
+    Engine.stretchSpeed -> MOUSE_BEHAVIOUR := 2170
+    Engine.stretchSpeed -> value := 500000 
+
+    Engine.stretchFormantLabel -> text := "Formant"
+    Engine.stretchFormantLabel -> FONT_TYPE := Engine.initFont
+    Engine.stretchFormantLabel -> POS_X := 54 - Engine.fxLabelTextOffsetX
+    Engine.stretchFormantLabel -> POS_Y := Engine.fxTabSpacingY[4] - Engine.fxLabelAbove - 1
+    Engine.stretchFormantLabel -> hide := HIDE_PART_BG
+    Engine.stretchFormantLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.stretchFormantLabel -> width := 150
+
+
+    Engine.stretchFormant -> DEFAULT_VALUE := 500000
+    Engine.stretchFormant -> MOUSE_BEHAVIOUR := 2170
+    Engine.stretchFormant -> value := 500000 
+    Engine.stretchFormant -> text := ""
+    Engine.stretchFormant -> PICTURE := "/Sliders/Slider100by11BiPolarDisabled"
+    Engine.stretchFormant -> POS_X := 54
+    Engine.stretchFormant -> POS_Y := Engine.fxTabSpacingY[4]
+    Engine.stretchFormant -> PARENT_PANEL := Engine.FXPanelID
+    Engine.stretchFormant -> height := 22
+
+
+    // GuiCallBacks.settingsSave[1, 43] := Engine.stretchOnOff
+
+    // EQ**************
+
+    Engine.EQLabel -> text := ""
+    Engine.EQLabel -> FONT_TYPE := Engine.initFont
+    Engine.EQLabel -> POS_X := 350
+    Engine.EQLabel -> POS_Y := Engine.fxTabSpacingY[2] - Engine.fxLabelAbove - 12
+    Engine.EQLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.EQLabel -> picture := "/Labels/EQLabel.png"
+    Engine.EQLabel -> width := 150
+
+
+    Engine.eqOnOff -> text := ""
+    Engine.eqOnOff -> PICTURE := "/Buttons/12-12buttonRadial"
+    Engine.eqOnOff -> POS_X := 437
+    Engine.eqOnOff -> POS_Y := Engine.fxTabSpacingY[2] + 7
+    Engine.eqOnOff -> PARENT_PANEL := Engine.FXPanelID
+    Engine.eqOnOff -> height := 22
+    GuiCallBacks.settingsSave[1, 43] := Engine.eqOnOff
+
+    Engine.highShelfLabel -> text := "High Shelf"
+    Engine.highShelfLabel -> FONT_TYPE := Engine.initFont
+    Engine.highShelfLabel -> POS_X := 350 - Engine.fxLabelTextOffsetX
+    Engine.highShelfLabel -> POS_Y := Engine.fxTabSpacingY[3] - Engine.fxLabelAbove - 1
+    Engine.highShelfLabel -> hide := HIDE_PART_BG
+    Engine.highShelfLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.highShelfLabel -> width := 150
+
+    Engine.highShelf -> DEFAULT_VALUE := 500000
+    Engine.highShelf -> MOUSE_BEHAVIOUR := 2170
+    Engine.highShelf -> PICTURE := "/Sliders/Slider100by11BiPolarDisabled"
+    Engine.highShelf -> value := 500000 //not resetting value on init??
+    Engine.highShelf -> PARENT_PANEL := Engine.FXPanelID
+    Engine.highShelf -> POS_X := 350
+    Engine.highShelf -> POS_Y := Engine.fxTabSpacingY[3] - 1
+    GuiCallBacks.settingsSave[1, 44] := Engine.highShelf
+
+    Engine.midBandLabel -> text := "Mid Band"
+    Engine.midBandLabel -> FONT_TYPE := Engine.initFont
+    Engine.midBandLabel -> POS_X := 350 - Engine.fxLabelTextOffsetX
+    Engine.midBandLabel -> POS_Y := Engine.fxTabSpacingY[4] - Engine.fxLabelAbove
+    Engine.midBandLabel -> hide := HIDE_PART_BG
+    Engine.midBandLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.midBandLabel -> width := 150
+
+
+    Engine.midBand -> DEFAULT_VALUE := 500000
+    Engine.midBand -> MOUSE_BEHAVIOUR := 2170
+    Engine.midBand -> PICTURE := "/Sliders/Slider100by11BiPolarDisabled"
+    Engine.midBand -> value := 500000 //not resetting value on init??
+    Engine.midBand -> PARENT_PANEL := Engine.FXPanelID
+    Engine.midBand -> POS_X := 350
+    Engine.midBand -> POS_Y := Engine.fxTabSpacingY[4]
+    GuiCallBacks.settingsSave[1, 45] := Engine.midBand
+
+    Engine.lowShelfLabel -> text := "Low Shelf"
+    Engine.lowShelfLabel -> FONT_TYPE := Engine.initFont
+    Engine.lowShelfLabel -> POS_X := 350 - Engine.fxLabelTextOffsetX
+    Engine.lowShelfLabel -> POS_Y := Engine.fxTabSpacingY[5] - Engine.fxLabelAbove
+    Engine.lowShelfLabel -> hide := HIDE_PART_BG
+    Engine.lowShelfLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.lowShelfLabel -> width := 150
+
+    Engine.lowShelf -> DEFAULT_VALUE := 500000
+    Engine.lowShelf -> MOUSE_BEHAVIOUR := 2170
+    Engine.lowShelf -> PICTURE := "/Sliders/Slider100by11BiPolarDisabled"
+    Engine.lowShelf -> value := 500000 //not resetting value on init??
+    Engine.lowShelf -> PARENT_PANEL := Engine.FXPanelID
+    Engine.lowShelf -> POS_X := 350
+    Engine.lowShelf -> POS_Y := Engine.fxTabSpacingY[5]
+    GuiCallBacks.settingsSave[1, 46] := Engine.lowShelf
+    
+    // bitcrush
+    Engine.bitcrushLabel -> text := ""
+    Engine.bitcrushLabel -> POS_X := 350
+    Engine.bitcrushLabel -> POS_Y := 51
+    Engine.bitcrushLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.bitcrushLabel -> picture := "/Labels/BitcrushLabel.png"
+    Engine.bitcrushLabel -> width := 150
+
+    Engine.bitcrushOnOff -> text := ""
+    Engine.bitcrushOnOff -> PICTURE := "/Buttons/12-12buttonRadial"
+    Engine.bitcrushOnOff -> POS_X := 437
+    Engine.bitcrushOnOff -> POS_Y := 82
+    Engine.bitcrushOnOff -> PARENT_PANEL := Engine.FXPanelID
+    Engine.bitcrushOnOff -> height := 22
+    GuiCallBacks.settingsSave[1, 47] := Engine.bitcrushOnOff
+
+    Engine.sampleRateLabel -> text := "Sample Rate"
+    Engine.sampleRateLabel -> FONT_TYPE := Engine.initFont
+    Engine.sampleRateLabel -> POS_X := 350 - Engine.fxLabelTextOffsetX
+    Engine.sampleRateLabel -> POS_Y := Engine.fxTabSpacingY[0] - Engine.fxLabelAbove
+    Engine.sampleRateLabel -> hide := HIDE_PART_BG
+    Engine.sampleRateLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.sampleRateLabel -> width := 150
+
+    Engine.sampleRate -> DEFAULT_VALUE := 110000
+    Engine.sampleRate -> MOUSE_BEHAVIOUR := 2170
+    Engine.sampleRate -> PICTURE := "/Sliders/Slider100by11Disabled"
+    Engine.sampleRate -> value := 110000 //not resetting value on init??
+    Engine.sampleRate -> PARENT_PANEL := Engine.FXPanelID
+    Engine.sampleRate -> POS_X := 350
+    Engine.sampleRate -> POS_Y := Engine.fxTabSpacingY[0]
+    GuiCallBacks.settingsSave[1, 48] := Engine.sampleRate
+
+    Engine.bitsLabel -> text := "Bits"
+    Engine.bitsLabel -> FONT_TYPE := Engine.initFont
+    Engine.bitsLabel -> POS_X := 350 - Engine.fxLabelTextOffsetX
+    Engine.bitsLabel -> POS_Y := Engine.fxTabSpacingY[1] - Engine.fxLabelAbove
+    Engine.bitsLabel -> hide := HIDE_PART_BG
+    Engine.bitsLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.bitsLabel -> width := 150
+
+    Engine.bits -> DEFAULT_VALUE := 1000000
+    Engine.bits -> MOUSE_BEHAVIOUR := 2170
+    Engine.bits -> PICTURE := "/Sliders/Slider100by11Disabled"
+    Engine.bits -> value := 1000000 
+    Engine.bits -> PARENT_PANEL := Engine.FXPanelID
+    Engine.bits -> POS_X := 350
+    Engine.bits -> POS_Y := Engine.fxTabSpacingY[1]
+    GuiCallBacks.settingsSave[1, 76] := Engine.bits
+
+
+
+    // Delay
+    Engine.delayLabel -> text := ""
+    Engine.delayLabel -> POS_X := 498
+    Engine.delayLabel -> POS_Y := 51
+    Engine.delayLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.delayLabel -> picture := "/Labels/DelayLabel.png"
+    Engine.delayLabel -> width := 150
+
+    Engine.delayOnOff -> text := ""
+    Engine.delayOnOff -> PICTURE := "/Buttons/12-12buttonRadial"
+    Engine.delayOnOff -> POS_X := 585
+    Engine.delayOnOff -> POS_Y := 82
+    Engine.delayOnOff -> PARENT_PANEL := Engine.FXPanelID
+    Engine.delayOnOff -> height := 22
+    GuiCallBacks.settingsSave[1, 49] := Engine.delayOnOff
+
+    Engine.delayRateLabel -> text := "Rate"
+    Engine.delayRateLabel -> FONT_TYPE := Engine.initFont
+    Engine.delayRateLabel -> POS_X := 498 - Engine.fxLabelTextOffsetX
+    Engine.delayRateLabel -> POS_Y := Engine.fxTabSpacingY[0] - Engine.fxLabelAbove
+    Engine.delayRateLabel -> hide := HIDE_PART_BG
+    Engine.delayRateLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.delayRateLabel -> width := 150
+
+    Engine.delayRate -> DEFAULT_VALUE := 300000
+    Engine.delayRate -> MOUSE_BEHAVIOUR := 2170
+    Engine.delayRate -> PICTURE := "/Sliders/Slider100by11Disabled"
+    Engine.delayRate -> value := 300000 //not resetting value on init??
+    Engine.delayRate -> PARENT_PANEL := Engine.FXPanelID
+    Engine.delayRate -> POS_X := 498
+    Engine.delayRate -> POS_Y := Engine.fxTabSpacingY[0]
+    GuiCallBacks.settingsSave[1, 50] := Engine.delayRate
+
+    Engine.delayFeedbackLabel -> text := "Feedback"
+    Engine.delayFeedbackLabel -> FONT_TYPE := Engine.initFont
+    Engine.delayFeedbackLabel -> POS_X := 498 - Engine.fxLabelTextOffsetX
+    Engine.delayFeedbackLabel -> POS_Y := Engine.fxTabSpacingY[1] - Engine.fxLabelAbove
+    Engine.delayFeedbackLabel -> hide := HIDE_PART_BG
+    Engine.delayFeedbackLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.delayFeedbackLabel -> width := 150
+
+    Engine.delayFeedback -> DEFAULT_VALUE := 300000
+    Engine.delayFeedback -> MOUSE_BEHAVIOUR := 2170
+    Engine.delayFeedback -> PICTURE := "/Sliders/Slider100by11Disabled"
+    Engine.delayFeedback -> value := 300000 //not resetting value on init??
+    Engine.delayFeedback -> PARENT_PANEL := Engine.FXPanelID
+    Engine.delayFeedback -> POS_X := 498
+    Engine.delayFeedback -> POS_Y := Engine.fxTabSpacingY[1]
+    GuiCallBacks.settingsSave[1, 51] := Engine.delayFeedback
+
+    Engine.delayMixLabel -> text := "Mix"
+    Engine.delayMixLabel -> FONT_TYPE := Engine.initFont
+    Engine.delayMixLabel -> POS_X := 498 - Engine.fxLabelTextOffsetX
+    Engine.delayMixLabel -> POS_Y := Engine.fxTabSpacingY[2] - Engine.fxLabelAbove
+    Engine.delayMixLabel -> hide := HIDE_PART_BG
+    Engine.delayMixLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.delayMixLabel -> width := 150
+
+    Engine.delayMix -> DEFAULT_VALUE := 300000
+    Engine.delayMix -> MOUSE_BEHAVIOUR := 2170
+    Engine.delayMix -> PICTURE := "/Sliders/Slider100by11Disabled"
+    Engine.delayMix -> value := 300000 
+    Engine.delayMix -> PARENT_PANEL := Engine.FXPanelID
+    Engine.delayMix -> POS_X := 498
+    Engine.delayMix -> POS_Y := Engine.fxTabSpacingY[2]
+    GuiCallBacks.settingsSave[1, 52] := Engine.delayMix
+
+    Engine.delayPingPong -> DEFAULT_VALUE := 0
+    Engine.delayPingPong -> PICTURE := "/Buttons/41-40pingPongDisabled"
+    Engine.delayPingPong -> text := ""
+    Engine.delayPingPong -> value := 0 //not resetting value on init??
+    Engine.delayPingPong -> PARENT_PANEL := Engine.FXPanelID
+    Engine.delayPingPong -> POS_X := 498
+    Engine.delayPingPong -> POS_Y := Engine.fxTabSpacingY[3] - 15
+    Engine.delayPingPong -> width := 45
+    Engine.delayPingPong -> height := 45
+    GuiCallBacks.settingsSave[1, 53] := Engine.delayPingPong
+
+    
+    // Reverb
+    Engine.reverbLabel -> text := ""
+    Engine.reverbLabel -> FONT_TYPE := Engine.initFont
+    Engine.reverbLabel -> POS_X := 646
+    Engine.reverbLabel -> POS_Y := 51
+    Engine.reverbLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.reverbLabel -> picture := "/Labels/ReverbLabel.png"
+    Engine.reverbLabel -> width := 150
+
+    Engine.reverbOnOff -> text := ""
+    Engine.reverbOnOff -> PICTURE := "/Buttons/12-12buttonRadial"
+    Engine.reverbOnOff -> POS_X := 733
+    Engine.reverbOnOff -> POS_Y := 82
+    Engine.reverbOnOff -> PARENT_PANEL := Engine.FXPanelID
+    Engine.reverbOnOff -> height := 22
+    GuiCallBacks.settingsSave[1, 54] := Engine.reverbOnOff
+
+    Engine.reverbDecayLabel -> text := "Decay"
+    Engine.reverbDecayLabel -> FONT_TYPE := Engine.initFont
+    Engine.reverbDecayLabel -> POS_X := 646 - Engine.fxLabelTextOffsetX
+    Engine.reverbDecayLabel -> POS_Y := Engine.fxTabSpacingY[0] - Engine.fxLabelAbove
+    Engine.reverbDecayLabel -> hide := HIDE_PART_BG
+    Engine.reverbDecayLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.reverbDecayLabel -> width := 150
+
+    Engine.reverbDecay -> DEFAULT_VALUE := 300000
+    Engine.reverbDecay -> MOUSE_BEHAVIOUR := 2170
+    Engine.reverbDecay -> PICTURE := "/Sliders/Slider100by11Disabled"
+    Engine.reverbDecay -> value := 300000 //not resetting value on init??
+    Engine.reverbDecay -> PARENT_PANEL := Engine.FXPanelID
+    Engine.reverbDecay -> POS_X := 646
+    Engine.reverbDecay -> POS_Y := Engine.fxTabSpacingY[0]
+    GuiCallBacks.settingsSave[1, 55] := Engine.reverbDecay
+
+    Engine.reverbMixLabel -> text := "Mix"
+    Engine.reverbMixLabel -> FONT_TYPE := Engine.initFont
+    Engine.reverbMixLabel -> POS_X := 646 - Engine.fxLabelTextOffsetX
+    Engine.reverbMixLabel -> POS_Y := Engine.fxTabSpacingY[1] - Engine.fxLabelAbove
+    Engine.reverbMixLabel -> hide := HIDE_PART_BG
+    Engine.reverbMixLabel -> PARENT_PANEL := Engine.FXPanelID
+    Engine.reverbMixLabel -> width := 150
+
+    Engine.reverbMix -> DEFAULT_VALUE := 300000
+    Engine.reverbMix -> MOUSE_BEHAVIOUR := 2170
+    Engine.reverbMix -> PICTURE := "/Sliders/Slider100by11Disabled"
+    Engine.reverbMix -> value := 300000 //not resetting value on init??
+    Engine.reverbMix -> PARENT_PANEL := Engine.FXPanelID
+    Engine.reverbMix -> POS_X := 646
+    Engine.reverbMix -> POS_Y := Engine.fxTabSpacingY[1]
+    GuiCallBacks.settingsSave[1, 56] := Engine.reverbMix
+
+    Engine.reverbReverse -> DEFAULT_VALUE := 0
+    Engine.reverbReverse -> PICTURE := "/Buttons/40-40buttonReverseDisabled"
+    Engine.reverbReverse -> text := ""
+    Engine.reverbReverse -> value := 0 //not resetting value on init??
+    Engine.reverbReverse -> PARENT_PANEL := Engine.FXPanelID
+    Engine.reverbReverse -> POS_X := 646 - 4
+    Engine.reverbReverse -> POS_Y := Engine.fxTabSpacingY[2] - 12
+    Engine.reverbReverse -> height := 50
+
+    GuiCallBacks.settingsSave[1, 57] := Engine.reverbReverse - 14
+
+    // **************************************************************FX TAB**************************************************************
+
+    // Scramble switch
+    set_control_par_str(Engine.scrambleButton, CONTROL_PAR_TEXT, "")
+    set_control_par(Engine.scrambleButtonID, CONTROL_PAR_PARENT_PANEL, Engine.mainTabPanelID)
+    Engine.scrambleButton -> height := 251
+    Engine.scrambleButton -> width := 251
+    Engine.scrambleButton -> picture := "Buttons/150-150BigDiceShadow"
+    // Engine.scrambleButton -> width := 27
+    Engine.scrambleButton -> POS_X := 325
+    Engine.scrambleButton -> POS_Y := 125
+    // Scramble switch on random page
+    set_control_par_str(Engine.scrambleButton2, CONTROL_PAR_TEXT, "")
+    set_control_par(Engine.scrambleButton2ID, CONTROL_PAR_PARENT_PANEL, Engine.ranTabPanelID)
+    Engine.scrambleButton2 -> height := 51
+    Engine.scrambleButton2 -> picture := "Buttons/DiceButton"
+    // Engine.scrambleButton2 -> width := 27
+    Engine.scrambleButton2 -> POS_X := 220
+    Engine.scrambleButton2 -> POS_Y := 90
+
+
+    // Footer knobs
+    while (i < 5)
+
+        Engine.footerLabels[i] -> POS_Y := 446
+        Engine.footerLabels[i] -> FONT_TYPE := Engine.initFontFull
+        Engine.footerLabels[i] -> hide := HIDE_PART_BG
+        Engine.footerLabels[i] -> TEXT_ALIGNMENT := 1
+
+        i := i + 1
+    end while
+    i := 0
+
+    Engine.footerLabels[0] -> POS_X := (105+4) + 0 * 122
+    Engine.footerLabels[1] -> POS_X := (107+4) + 1 * 122
+    Engine.footerLabels[2] -> POS_X := (107+4) + 2 * 122
+    Engine.footerLabels[3] -> POS_X := (104+4) + 3 * 122
+    Engine.footerLabels[4] -> POS_X := (106+4) + 4 * 122
+
+    Engine.footerKnob0 -> picture := "/Knobs/FooterKnob2"
+    Engine.footerKnob0 -> POS_X := 129 + 0 * 122
+    Engine.footerKnob0 -> POS_Y := 400
+    Engine.footerKnob0 -> MOUSE_BEHAVIOUR := -600
+    Engine.footerKnob0 -> DEFAULT_VALUE := 0
+    Engine.footerKnob0 -> value := 0
+
+    Engine.footerKnob1 -> picture := "/Knobs/FooterKnob2"
+    Engine.footerKnob1 -> POS_X := 129 + 1 * 122
+    Engine.footerKnob1 -> POS_Y := 400
+    Engine.footerKnob1 -> MOUSE_BEHAVIOUR := -600
+    Engine.footerKnob1 -> DEFAULT_VALUE := 110000
+    Engine.footerKnob1 -> value := 110000
+
+    Engine.footerKnob2 -> picture := "/Knobs/FooterKnob2"
+    Engine.footerKnob2 -> POS_X := 129 + 2 * 122
+    Engine.footerKnob2 -> POS_Y := 400
+    Engine.footerKnob2 -> MOUSE_BEHAVIOUR := -600
+    Engine.footerKnob2 -> DEFAULT_VALUE := 63
+    Engine.footerKnob2 -> value := 63
+
+    Engine.footerKnob3 -> picture := "/Knobs/FooterKnob2"
+    Engine.footerKnob3 -> POS_X := 129 + 3 * 122
+    Engine.footerKnob3 -> POS_Y := 400
+    Engine.footerKnob3 -> MOUSE_BEHAVIOUR := -600
+    Engine.footerKnob3 -> DEFAULT_VALUE := 300000
+    Engine.footerKnob3 -> value := 300000
+
+    Engine.footerKnob4 -> picture := "/Knobs/FooterKnob2"
+    Engine.footerKnob4 -> POS_X := 129 + 4 * 122
+    Engine.footerKnob4 -> POS_Y := 400
+    Engine.footerKnob4 -> MOUSE_BEHAVIOUR := -600
+    Engine.footerKnob4 -> DEFAULT_VALUE := 300000
+    Engine.footerKnob4 -> value := 300000
+
+
+    // footer knobs SETTINGS
+    GuiCallBacks.settingsSave[1, 32] := Engine.footerKnob0
+    GuiCallBacks.settingsSave[1, 33] := Engine.footerKnob1
+    GuiCallBacks.settingsSave[1, 34] := Engine.footerKnob2
+    GuiCallBacks.settingsSave[1, 35] := Engine.footerKnob3
+    GuiCallBacks.settingsSave[1, 36] := Engine.footerKnob4
+
+    Engine.footerLabels[0] -> text := "Overlap"
+    Engine.footerLabels[1] -> text := "Bitcrush"
+    Engine.footerLabels[2] -> text := "Droplets"
+    Engine.footerLabels[3] -> text := "Decay"
+    Engine.footerLabels[4] -> text := "Reverb"
+
+    Engine.footerBitcrushButton -> picture := "/Buttons/12-12buttonRadial"
+    Engine.footerBitcrushButton -> POS_X := 129 + 122 - 16
+    Engine.footerBitcrushButton -> POS_Y := 447
+    Engine.footerBitcrushButton -> DEFAULT_VALUE := 0
+    Engine.footerBitcrushButton -> value := 0
+
+    Engine.footerDropletsButton -> picture := "/Buttons/12-12buttonRadial"
+    Engine.footerDropletsButton -> POS_X := 127 + 122*2 - 16
+    Engine.footerDropletsButton -> POS_Y := 447
+    Engine.footerDropletsButton -> DEFAULT_VALUE := 0
+    Engine.footerDropletsButton -> value := 0
+
+    Engine.footerDelayButton -> picture := "/Buttons/12-12buttonRadial"
+    Engine.footerDelayButton -> POS_X := 129 + 122*3 - 16
+    Engine.footerDelayButton -> POS_Y := 447
+    Engine.footerDelayButton -> DEFAULT_VALUE := 0
+    Engine.footerDelayButton -> value := 0
+
+    Engine.footerReverbButton -> picture := "/Buttons/12-12buttonRadial"
+    Engine.footerReverbButton -> POS_X := 129 + 122*4 - 16
+    Engine.footerReverbButton -> POS_Y := 447
+    Engine.footerReverbButton -> DEFAULT_VALUE := 0
+    Engine.footerReverbButton -> value := 0
+
+    // Main MODWHEEL knob
+    Engine.mainKnobMod -> picture := "/Sliders/Slider150by11"
+    Engine.mainKnobMod -> POS_X := 325
+    Engine.mainKnobMod -> POS_Y := 300
+    Engine.mainKnobMod -> MOUSE_BEHAVIOUR := 2170
+    Engine.mainKnobMod -> DEFAULT_VALUE := 0
+    Engine.mainKnobMod -> PARENT_PANEL := Engine.mainTabPanelID
+
+    // mod wheel label
+    Engine.modBackgroundLabel -> picture := "mod-background-test"
+    Engine.modBackgroundLabel -> POS_X := 0
+    Engine.modBackgroundLabel -> POS_Y := 0
+    Engine.modBackgroundLabel -> text := ""
+
+    Engine.modBackgroundLabelBlur -> picture := "mod-background-test-blur"
+    Engine.modBackgroundLabelBlur -> POS_X := 0
+    Engine.modBackgroundLabelBlur -> POS_Y := 0
+    Engine.modBackgroundLabelBlur -> text := ""
+    Engine.modBackgroundLabelBlur -> hide := HIDE_WHOLE_CONTROL
+
+    // SAVE STATE button
+    set_control_par_str(Engine.saveStateButton, CONTROL_PAR_TEXT, "Save State")
+    set_control_par(get_ui_id(Engine.saveStateButton), CONTROL_PAR_PARENT_PANEL, Engine.statePanelID)
+    Engine.saveStateButton -> POS_Y := 450
+    Engine.saveStateButton -> POS_X := 0
+
+    // LOAD STATE button
+    set_control_par_str(Engine.loadStateButton, CONTROL_PAR_TEXT, "Load State")
+    set_control_par(get_ui_id(Engine.loadStateButton), CONTROL_PAR_PARENT_PANEL, Engine.statePanelID)
+    Engine.loadStateButton -> POS_Y := 450
+    Engine.loadStateButton -> POS_X := 40
+
+    Engine.saveStateButton -> hide := HIDE_WHOLE_CONTROL
+    Engine.loadStateButton -> hide := HIDE_WHOLE_CONTROL
+
+
+
+    // TABS
+    while(i < 3)
+        Engine.tabs[i] -> width := 40
+        Engine.tabs[i] -> height := 40
+        Engine.tabs[i] -> text := ""
+        Engine.tabs[i] -> value := 0
+        Engine.tabs[i] -> TEXTPOS_Y := 8
+        Engine.tabs[i] -> PARENT_PANEL := Engine.tabsPanelID
+        i := i + 1
+    end while
+    i := 0
+    Engine.tabs[0] -> POS_X := 0 + 0 * 61
+    Engine.tabs[1] -> POS_X := 0 + 1 * 61
+    Engine.tabs[2] -> POS_X := 0 + 2 * 61
+
+    Engine.tabs[0] -> PICTURE := "/Buttons/33-33randomTabNew"
+    Engine.tabs[1] -> PICTURE := "/Buttons/33-33fxTabShadow"
+    Engine.tabs[2] -> PICTURE := "/Buttons/33-33arpTabShadow"
+
+    // Preset Matrix
+    Engine.presetBrowserPanel -> PARENT_PANEL := Engine.presetPanelID
+    Engine.presetDropDown -> PARENT_PANEL := Engine.presetPanelID
+
+    Engine.presetDropDown -> POS_X := 26
+    Engine.presetDropDown -> POS_Y := 8
+    Engine.presetDropDown -> width := 120
+    Engine.presetDropDown -> height := 22
+
+    Engine.presetDropDown -> TEXT := ""
+    Engine.presetDropDown -> FONT_TYPE := Engine.initFontFull
+    Engine.presetDropDown -> picture := "/Buttons/100-15presetLabel"
+    Engine.presetDropDown -> DISABLE_TEXT_SHIFTING := 1
+
+    Engine.presetCategories0 -> value := 1
+    Engine.presetPageIndex0 -> value := 1
+    Engine.presetPageIndex1 -> value := 0
+    Engine.presetPageIndex2 -> value := 0
+    Engine.presetPageIndex3 -> value := 0
+    Engine.presetPageIndex4 -> value := 0
+    Engine.presetPageIndex5 -> value := 0
+    Engine.presetPageIndex6 -> value := 0
+
+    Engine.currentPresetState[0, 0, 0] := 1
+    Engine.presetColumn[0] := 1
+
+    // while(i < 4)
+    //     while(j < 16)
+    //         Engine.presetNames[i, j] := "Preset " & j + 1 & " Cat " & i + 1
+    //         // message(Engine.presetNames[i, j])
+    //         j := j + 1
+    //     end while
+    //     j := 0
+    //     i := i + 1
+    // end while
+    // i := 0
+
+
+    Engine.presetNames[0, 0] := "Normal 1"
+    Engine.presetNames[0, 1] := "Normal 2"
+    Engine.presetNames[0, 2] := "Normal 3"
+    Engine.presetNames[0, 3] := "Normal 4"
+    Engine.presetNames[0, 4] := "Normal 5"
+    Engine.presetNames[0, 5] := "Normal 6"
+    Engine.presetNames[0, 6] := "Normal 7"
+
+    Engine.presetNames[1, 0] := "Droplets 1"
+    Engine.presetNames[1, 1] := "Droplets 2"
+    Engine.presetNames[1, 2] := "Droplets 3"
+    Engine.presetNames[1, 3] := "Droplets 4"
+    Engine.presetNames[1, 4] := "Droplets 5"
+    Engine.presetNames[1, 5] := "Droplets 6"
+    Engine.presetNames[1, 6] := "Droplets 7"
+
+    Engine.presetNames[2, 0] := "Reverse 1"
+    Engine.presetNames[2, 1] := "Reverse 2"
+    Engine.presetNames[2, 2] := "Reverse 3"
+    Engine.presetNames[2, 3] := "Reverse 4"
+    Engine.presetNames[2, 4] := "Reverse 5"
+    Engine.presetNames[2, 5] := "Reverse 6"
+    Engine.presetNames[2, 6] := "Reverse 7"
+
+    Engine.presetNames[3, 0] := "Unfinished"
+    Engine.presetNames[3, 1] := "Unfinished"
+    Engine.presetNames[3, 2] := "Unfinished"
+    Engine.presetNames[3, 3] := "Unfinished"
+    Engine.presetNames[3, 4] := "Unfinished"
+    Engine.presetNames[3, 5] := "Unfinished"
+    Engine.presetNames[3, 6] := "Unfinished"
+
+
+    while (i < 4)
+        Engine.presetCategories[i] -> POS_X := 32                       // TODO: initialize all positions to 0 because it makes a difference
+        Engine.presetCategories[i] -> POS_Y := 0 + (i * 28) + 26
+        Engine.presetCategories[i] -> width := 40
+        Engine.presetCategories[i] -> height := 22
+        Engine.presetCategories[i] -> PICTURE := "button1-Animated"
+        Engine.presetCategories[i] -> TEXTPOS_Y := 5
+        Engine.presetCategories[i] -> DISABLE_TEXT_SHIFTING := 1
+        Engine.presetCategories[i] -> FONT_TYPE := Engine.initFontFull
+        Engine.presetCategories[i] -> TEXT_ALIGNMENT := 0
+        Engine.presetCategories[i] -> PARENT_PANEL := Engine.presetBrowserPanelID
+
+        i := i + 1
+    end while
+    i := 0
+
+    Engine.presetCategories[0] -> TEXT := "Neutral"
+    Engine.presetCategories[1] -> TEXT := "Droplets"
+    Engine.presetCategories[2] -> TEXT := "Reverse"
+    Engine.presetCategories[3] -> TEXT := "Experimental"
+
+
+
+    while (i < 7)
+        Engine.presetPageIndex[i] -> TEXT := Engine.presetNames[0, i]
+        Engine.presetPageIndex[i] -> POS_X := 182
+        Engine.presetPageIndex[i] -> POS_Y := (i * 28) + 26
+        Engine.presetPageIndex[i] -> width := 128
+        Engine.presetPageIndex[i] -> height := 20
+        Engine.presetPageIndex[i] -> PICTURE := "button2-Animated"
+
+        Engine.presetPageIndex[i] -> FONT_TYPE := Engine.initFontFull
+
+        Engine.presetPageIndex[i] -> DISABLE_TEXT_SHIFTING := 1
+        Engine.presetPageIndex[i] -> TEXTPOS_Y := 4
+
+        Engine.presetPageIndex[i] -> TEXT_ALIGNMENT := 0
+        Engine.presetPageIndex[i] -> PARENT_PANEL := Engine.presetBrowserPanelID
+
+        i := i + 1
+    end while
+    i := 0
+    Engine.presetBrowserPanel -> PARENT_PANEL := Engine.presetPanelID
+
+    move_control_px(Engine.nextPage, 227, 236)
+    move_control_px(Engine.prevPage, 182, 236)
+    Engine.nextPage -> text := ""
+    Engine.prevPage -> text := ""
+    Engine.nextPage -> picture := "/Buttons/10-10buttonArrowRight"
+    Engine.prevPage -> picture := "/Buttons/10-10buttonArrowLeft"
+    Engine.nextPage -> PARENT_PANEL := Engine.presetBrowserPanelID
+    Engine.prevPage -> PARENT_PANEL := Engine.presetBrowserPanelID
+
+    move_control_px(Engine.page0Button, 197, 236)
+    move_control_px(Engine.page1Button, 212, 236)
+    Engine.page0Button -> value := 1
+    Engine.page0Button -> text := ""
+    Engine.page0Button -> picture := "/Buttons/10-10buttonPageCircle"
+    Engine.page0Button -> PARENT_PANEL := Engine.presetBrowserPanelID
+    Engine.page1Button -> text := ""
+    Engine.page1Button -> picture := "/Buttons/10-10buttonPageCircle"
+    Engine.page1Button -> PARENT_PANEL := Engine.presetBrowserPanelID
+    Engine.prevPage -> hide := HIDE_WHOLE_CONTROL
+    Engine.nextPage -> hide := HIDE_WHOLE_CONTROL
+    Engine.page0Button -> hide := HIDE_WHOLE_CONTROL
+    Engine.page1Button -> hide := HIDE_WHOLE_CONTROL
+
+    Engine.presetBrowserBackground -> PARENT_PANEL := Engine.presetBrowserPanelID
+    Engine.presetBrowserBackground -> POS_X := 0
+    Engine.presetBrowserBackground -> POS_Y := 0
+    Engine.presetBrowserBackground -> picture := "Browser-Background.png"
+    Engine.presetBrowserBackground -> text := ""
+
+    // while (i < 4)
+    //     Engine.catLightUp[i] -> POS_X := 16
+    //     Engine.catLightUp[i] -> POS_Y := (i * 28) + 37
+
+    //     Engine.catLightUp[i] -> Z_LAYER := 1
+
+    //     Engine.catLightUp[i] -> text := ""
+    //     Engine.catLightUp[i] -> picture := "lightUpLabelSmall"
+    //     Engine.catLightUp[i] -> PARENT_PANEL := Engine.presetBrowserPanelID
+    //     i := i + 1
+    // end while
+    // i := 0
+    // Engine.catLightUp[0] -> picture_state := 1
+
+    // *******************************************************PARTICLE Tab******************************************
+
+    move_control(Engine.timeVariation, 3, 3)
+    move_control(Engine.Tempo_sync, 1, 3)
+    move_control(Engine.rate_knob, 2, 3)
+    move_control(Engine.particleDryWet, 2, 7)
+
+    Engine.noteClass[0] := "C"
+    Engine.noteClass[1] := "C#"
+    Engine.noteClass[2] := "D"
+    Engine.noteClass[3] := "D#"
+    Engine.noteClass[4] := "E"
+    Engine.noteClass[5] := "F"
+    Engine.noteClass[6] := "F#"
+    Engine.noteClass[7] := "G"
+    Engine.noteClass[8] := "G#"
+    Engine.noteClass[9] := "A"
+    Engine.noteClass[10] := "A#"
+    Engine.noteClass[11] := "B"
+
+    Engine.tempoNames[0] := "1/128"
+    Engine.tempoNames[1] := "1/64"
+    Engine.tempoNames[2] := "1/32"
+    Engine.tempoNames[3] := "1/16 T"
+    Engine.tempoNames[4] := "3/64"
+    Engine.tempoNames[5] := "1/16"
+    Engine.tempoNames[6] := "1/8 T"
+    Engine.tempoNames[7] := "3/32"
+    Engine.tempoNames[8] := "1/8"
+    Engine.tempoNames[9] := "1/4 T"
+    Engine.tempoNames[10] := "3/16"
+    Engine.tempoNames[11] := "1/4"
+    Engine.tempoNames[12] := "1/2 T"
+    Engine.tempoNames[13] := "3/8"
+    Engine.tempoNames[14] := "1/2"
+    Engine.tempoNames[15] := "3/4"
+    Engine.tempoNames[16] := "4/4"
+    Engine.tempoNames[17] := "Bar"
+
+    // variation section
+    Engine.particleVariationSectionLabel -> text := "Variation"
+    Engine.particleVariationSectionLabel -> FONT_TYPE := Engine.initFont
+    Engine.particleVariationSectionLabel -> width := 150
+
+    Engine.particleVariationSectionLabel -> POS_X := 325
+    Engine.particleVariationSectionLabel -> POS_Y := 80 + 100
+    Engine.particleVariationSectionLabel -> PARENT_PANEL := Engine.particleTabPanelID
+    Engine.particleVariationSectionLabel -> hide := HIDE_WHOLE_CONTROL
+
+        // particle time variation
+        Engine.particleVariationLabel -> text := "Time Variation"
+        Engine.particleVariationLabel -> FONT_TYPE := Engine.initFont
+        Engine.particleVariationLabel -> width := 150
+
+        Engine.particleVariationLabel -> POS_X := 325 - Engine.fxLabelTextOffsetX
+        Engine.particleVariationLabel -> POS_Y := Engine.particleTabSpacingY[2] - Engine.fxLabelAbove
+        Engine.particleVariationLabel -> hide := HIDE_PART_BG
+
+        Engine.timeVariation -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.timeVariation -> DEFAULT_VALUE := 0
+        Engine.timeVariation -> VALUE := 0
+        Engine.timeVariation -> picture := "/Sliders/Slider150by11Disabled"
+        Engine.timeVariation -> MOUSE_BEHAVIOUR := 2170
+        Engine.timeVariation -> POS_X := 325
+        Engine.timeVariation -> POS_Y := Engine.particleTabSpacingY[2]
+        
+        GuiCallBacks.settingsSave[1, 42] := Engine.timeVariation
+
+        // particleOcatave
+        Engine.particleOctaveLabel -> text := "Octave Variation"
+        Engine.particleOctaveLabel -> FONT_TYPE := Engine.initFont
+        Engine.particleOctaveLabel -> width := 150
+
+        Engine.particleOctaveLabel -> POS_X := 325 - Engine.fxLabelTextOffsetX
+        Engine.particleOctaveLabel -> POS_Y := Engine.particleTabSpacingY[3] - Engine.fxLabelAbove
+        Engine.particleOctaveLabel -> hide := HIDE_PART_BG
+
+        Engine.particleOctave -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleOctave -> DEFAULT_VALUE := 0
+        Engine.particleOctave -> VALUE := 0
+        Engine.particleOctave -> picture := "/Sliders/Slider150by11-3StateDisabled"
+        Engine.particleOctave -> MOUSE_BEHAVIOUR := 2170
+        Engine.particleOctave -> POS_X := 325
+        Engine.particleOctave -> POS_Y := Engine.particleTabSpacingY[3]
+
+        GuiCallBacks.settingsSave[1, 58] := Engine.particleOctave
+
+        // particle pan
+        Engine.particleSpreadLabel -> text := "Pan Variation"
+        Engine.particleSpreadLabel -> FONT_TYPE := Engine.initFont
+        Engine.particleSpreadLabel -> width := 150
+
+        Engine.particleSpreadLabel -> POS_X := 325 - Engine.fxLabelTextOffsetX
+        Engine.particleSpreadLabel -> POS_Y := Engine.particleTabSpacingY[4] - Engine.fxLabelAbove
+        Engine.particleSpreadLabel -> hide := HIDE_PART_BG
+
+        Engine.particleSpread -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleSpread -> DEFAULT_VALUE := 0
+        Engine.particleSpread -> VALUE := 0
+        Engine.particleSpread -> picture := "/Sliders/Slider150by11Disabled"
+        Engine.particleSpread -> MOUSE_BEHAVIOUR := 2170
+        Engine.particleSpread -> POS_X := 325
+        Engine.particleSpread -> POS_Y := Engine.particleTabSpacingY[4]
+
+        GuiCallBacks.settingsSave[1, 59] := Engine.particleSpread
+
+
+        // particle vol var
+        Engine.particleVolVariationLabel -> text := "Volume Variation"
+        Engine.particleVolVariationLabel -> FONT_TYPE := Engine.initFont
+        Engine.particleVolVariationLabel -> width := 150
+
+        Engine.particleVolVariationLabel -> POS_X := 325 - Engine.fxLabelTextOffsetX
+        Engine.particleVolVariationLabel -> POS_Y := Engine.particleTabSpacingY[5] - Engine.fxLabelAbove
+        Engine.particleVolVariationLabel -> hide := HIDE_PART_BG
+
+        Engine.particleVolVariation -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleVolVariation -> DEFAULT_VALUE := 0
+        Engine.particleVolVariation -> VALUE := 0
+        Engine.particleVolVariation -> picture := "/Sliders/Slider150by11Disabled"
+        Engine.particleVolVariation -> MOUSE_BEHAVIOUR := 2170
+        Engine.particleVolVariation -> POS_X := 325
+        Engine.particleVolVariation -> POS_Y := Engine.particleTabSpacingY[5]
+
+        GuiCallBacks.settingsSave[1, 60] := Engine.particleVolVariation
+
+
+    // Playback section
+    Engine.particlePlaybackLabel -> text := ""
+    Engine.particlePlaybackLabel -> FONT_TYPE := Engine.initFont
+    Engine.particlePlaybackLabel -> width := 150
+
+    Engine.particlePlaybackLabel -> POS_X := 81
+    Engine.particlePlaybackLabel -> POS_Y := 51
+    Engine.particlePlaybackLabel -> PARENT_PANEL := Engine.particleTabPanelID
+    Engine.particlePlaybackLabel -> picture := "/Labels/PlaybackLabel.png"
+
+        // Crossfade particle
+        Engine.particleCrossfadeKnobLabel -> text := "Overlap"
+        Engine.particleCrossfadeKnobLabel -> FONT_TYPE := Engine.initFont
+        Engine.particleCrossfadeKnobLabel -> width := 150
+
+        Engine.particleCrossfadeKnobLabel -> POS_X := 81 - Engine.fxLabelTextOffsetX
+        Engine.particleCrossfadeKnobLabel -> POS_Y := Engine.particleTabSpacingY[0] - Engine.fxLabelAbove
+        Engine.particleCrossfadeKnobLabel -> hide := HIDE_PART_BG
+        Engine.particleCrossfadeKnobLabel -> PARENT_PANEL := Engine.particleTabPanelID
+
+        Engine.particleCrossfadeKnob -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleCrossfadeKnob -> DEFAULT_VALUE := 0
+        Engine.particleCrossfadeKnob -> VALUE := 0
+        Engine.particleCrossfadeKnob -> picture := "/Sliders/Slider150by11-7StateDisabled"
+        Engine.particleCrossfadeKnob -> MOUSE_BEHAVIOUR := 2170
+        Engine.particleCrossfadeKnob -> POS_X := 81
+        Engine.particleCrossfadeKnob -> POS_Y := Engine.particleTabSpacingY[0]
+
+        GuiCallBacks.settingsSave[1, 61] := Engine.particleCrossfadeKnob
+
+        // particle reverse button
+        Engine.particleReverseMode -> DEFAULT_VALUE := 0
+        Engine.particleReverseMode -> PICTURE := "/Buttons/40-40buttonReverseDisabled"
+        Engine.particleReverseMode -> value := 0 //not resetting value on init??
+        Engine.particleReverseMode -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleReverseMode -> text := ""
+        Engine.particleReverseMode -> FONT_TYPE := Engine.initFont
+        Engine.particleReverseMode -> POS_X := 77
+        Engine.particleReverseMode -> POS_Y := Engine.particleTabSpacingY[1] - 14
+
+        GuiCallBacks.settingsSave[1, 62] := Engine.particleReverseMode
+
+        // particle run through fx button
+        Engine.particleFXButton -> DEFAULT_VALUE := 1
+        Engine.particleFXButton -> PICTURE := "/Buttons/33-33fxTabDisabled"
+        Engine.particleFXButton -> value := 1 //not resetting value on init??
+        Engine.particleFXButton -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleFXButton -> text := ""
+        Engine.particleFXButton -> width := 35
+        Engine.particleFXButton -> height := 35
+
+        Engine.particleFXButton -> FONT_TYPE := Engine.initFont
+        Engine.particleFXButton -> POS_X := 150
+        Engine.particleFXButton -> POS_Y := Engine.particleTabSpacingY[1] - 14
+
+        GuiCallBacks.settingsSave[1, 71] := Engine.particleFXButton
+
+
+    // Stretch Section
+    Engine.particleStretchSectionLabel -> text := ""
+    Engine.particleStretchSectionLabel -> FONT_TYPE := Engine.initFont
+    Engine.particleStretchSectionLabel -> width := 150
+
+    Engine.particleStretchSectionLabel -> POS_X := 81
+    Engine.particleStretchSectionLabel -> POS_Y := 186
+    Engine.particleStretchSectionLabel -> PARENT_PANEL := Engine.particleTabPanelID
+    Engine.particleStretchSectionLabel -> picture := "/Labels/StretchLabel.png"
+
+        // ON OFF
+        Engine.particleStretchMode -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleStretchMode -> DEFAULT_VALUE := 0
+        Engine.particleStretchMode -> POS_X := 81 + 137
+        Engine.particleStretchMode -> POS_Y := 216
+        Engine.particleStretchMode -> picture := "/Buttons/12-12buttonRadial"
+        Engine.particleStretchMode -> text := ""
+
+        GuiCallBacks.settingsSave[1, 63] := Engine.particleStretchMode
+
+        // Stretch Speed
+        Engine.particleStretchSpeedLabel -> text := "Speed"
+        Engine.particleStretchSpeedLabel -> FONT_TYPE := Engine.initFont
+        Engine.particleStretchSpeedLabel -> width := 150
+
+        Engine.particleStretchSpeedLabel -> POS_X := 81 - Engine.fxLabelTextOffsetX
+        Engine.particleStretchSpeedLabel -> POS_Y := Engine.particleTabSpacingY[3] - Engine.fxLabelAbove
+        Engine.particleStretchSpeedLabel -> hide := HIDE_PART_BG
+        Engine.particleStretchSpeedLabel -> PARENT_PANEL := Engine.particleTabPanelID
+
+        Engine.particleStretchSpeed -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleStretchSpeed -> DEFAULT_VALUE := 500000
+        Engine.particleStretchSpeed -> VALUE := 500000
+        Engine.particleStretchSpeed -> picture := "/Sliders/Slider150by11BiPolarDisabled"
+        Engine.particleStretchSpeed -> MOUSE_BEHAVIOUR := 2170
+        Engine.particleStretchSpeed -> POS_X := 81
+        Engine.particleStretchSpeed -> POS_Y := Engine.particleTabSpacingY[3]
+
+        GuiCallBacks.settingsSave[1, 64] := Engine.particleStretchSpeed
+
+        // Stretch Formant
+        Engine.particleStretchFormantLabel -> text := "Formant"
+        Engine.particleStretchFormantLabel -> FONT_TYPE := Engine.initFont
+        Engine.particleStretchFormantLabel -> width := 150
+
+        Engine.particleStretchFormantLabel -> POS_X := 81 - Engine.fxLabelTextOffsetX
+        Engine.particleStretchFormantLabel -> POS_Y := Engine.particleTabSpacingY[4] - Engine.fxLabelAbove
+        Engine.particleStretchFormantLabel -> hide := HIDE_PART_BG
+        Engine.particleStretchFormantLabel -> PARENT_PANEL := Engine.particleTabPanelID
+
+        Engine.particleStretchFormant -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleStretchFormant -> DEFAULT_VALUE := 500000
+        Engine.particleStretchFormant -> VALUE := 500000
+        Engine.particleStretchFormant -> picture := "/Sliders/Slider150by11BiPolarDisabled"
+        Engine.particleStretchFormant -> MOUSE_BEHAVIOUR := 2170
+        Engine.particleStretchFormant -> POS_X := 81
+        Engine.particleStretchFormant -> POS_Y := Engine.particleTabSpacingY[4]
+
+        GuiCallBacks.settingsSave[1, 65] := Engine.particleStretchFormant
+
+    // Main section
+    Engine.particleMainLabel -> text := ""
+    Engine.particleMainLabel -> FONT_TYPE := Engine.initFont
+
+    Engine.particleMainLabel -> POS_X := 325
+    Engine.particleMainLabel -> POS_Y := 52
+    Engine.particleMainLabel -> PARENT_PANEL := Engine.particleTabPanelID
+    Engine.particleMainLabel -> picture := "/Labels/DropletsLabel.png"
+
+
+        // ON OFF
+        Engine.particleMode -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleMode -> DEFAULT_VALUE := 0
+        Engine.particleMode -> POS_X := 462
+        Engine.particleMode -> POS_Y := 79
+        Engine.particleMode -> picture := "/Buttons/12-12buttonRadial"
+        Engine.particleMode -> text := ""
+
+        GuiCallBacks.settingsSave[1, 38] := Engine.particleMode
+
+        // particle mix 
+        Engine.particleMixLabel -> text := "Mix"
+        Engine.particleMixLabel -> FONT_TYPE := Engine.initFont
+        Engine.particleMixLabel -> width := 150
+
+        Engine.particleMixLabel -> POS_X := 325 - Engine.fxLabelTextOffsetX
+        Engine.particleMixLabel -> POS_Y := Engine.particleTabSpacingY[0] - Engine.fxLabelAbove
+        Engine.particleMixLabel -> hide := HIDE_PART_BG
+
+        Engine.particleDryWet -> DEFAULT_VALUE := 63
+        Engine.particleDryWet -> VALUE := 63
+        Engine.particleDryWet -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleDryWet -> picture := "/Sliders/Slider150by11BiPolarDisabled"
+        Engine.particleDryWet -> MOUSE_BEHAVIOUR := 2170
+        Engine.particleDryWet -> POS_X := 325
+        Engine.particleDryWet -> POS_Y := Engine.particleTabSpacingY[0]
+        set_controller(104, 0) // initialize volume
+
+        // particle rate
+        Engine.particleRateLabel -> text := "Rate"
+        Engine.particleRateLabel -> FONT_TYPE := Engine.initFont
+        Engine.particleRateLabel -> width := 150
+
+        Engine.particleRateLabel -> POS_X := 325 - Engine.fxLabelTextOffsetX
+        Engine.particleRateLabel -> POS_Y := Engine.particleTabSpacingY[1] - Engine.fxLabelAbove
+        Engine.particleRateLabel -> hide := HIDE_PART_BG
+
+        Engine.Rate_knob -> DEFAULT_VALUE := 900000
+        Engine.Rate_knob -> VALUE := 900000
+        Engine.Rate_knob -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.Rate_knob -> picture := "/Sliders/Slider150by11Disabled"
+        Engine.Rate_knob -> MOUSE_BEHAVIOUR := 2170
+        Engine.Rate_knob -> POS_X := 325
+        Engine.Rate_knob -> POS_Y := Engine.particleTabSpacingY[1]
+
+        GuiCallBacks.settingsSave[1, 41] := Engine.Rate_knob
+
+        // particle tempo sync
+        Engine.Tempo_sync -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.Tempo_sync -> DEFAULT_VALUE := 0
+        Engine.Tempo_sync -> VALUE := 0
+        Engine.Tempo_sync -> picture := "/Buttons/13-13ClockButton"
+        Engine.Tempo_sync -> POS_X := 360
+        Engine.Tempo_sync -> POS_Y := Engine.particleTabSpacingY[1] - Engine.fxLabelAbove - 1
+        Engine.Tempo_sync -> text := ""
+
+        GuiCallBacks.settingsSave[1, 39] := Engine.Tempo_sync
+
+        // maybe count, we see
+
+
+    // ADSR Section
+    Engine.particleADSRLabel -> text := ""
+    Engine.particleADSRLabel -> POS_X := 569
+    Engine.particleADSRLabel -> POS_Y := 51
+    Engine.particleADSRLabel -> PICTURE := "/Labels/ADSRLabel.png"
+    Engine.particleADSRLabel -> PARENT_PANEL := Engine.particleTabPanelID
+
+        // ADSR ATTACK KNOB
+        Engine.particleAttackKnob -> DEFAULT_VALUE := 70000
+        Engine.particleAttackKnob -> MOUSE_BEHAVIOUR := 2170
+        Engine.particleAttackKnob -> PICTURE := "/Sliders/Slider150by11Disabled"
+        Engine.particleAttackKnob -> value := 70000 //not resetting value on init??
+        Engine.particleAttackKnob -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleAttackKnob -> POS_X := 569
+        Engine.particleAttackKnob -> POS_Y := Engine.particleTabSpacingY[0]
+
+        // ADD TO SETTINGS
+        GuiCallBacks.settingsSave[1, 66] := Engine.particleAttackKnob
+
+        Engine.particleAttackKnobLabel -> text := "Attack"
+        Engine.particleAttackKnobLabel -> FONT_TYPE := Engine.initFont
+        Engine.particleAttackKnobLabel -> width := 150
+
+        Engine.particleAttackKnobLabel -> POS_X := 569 - Engine.fxLabelTextOffsetX
+        Engine.particleAttackKnobLabel -> POS_Y := Engine.particleTabSpacingY[0] - Engine.fxLabelAbove
+        Engine.particleAttackKnobLabel -> hide := HIDE_PART_BG
+        Engine.particleAttackKnobLabel -> PARENT_PANEL := Engine.particleTabPanelID
+
+        // ADSR DECAY KNOB
+        Engine.particleDecayKnob -> DEFAULT_VALUE := 500000
+        Engine.particleDecayKnob -> MOUSE_BEHAVIOUR := 2170
+        Engine.particleDecayKnob -> PICTURE := "/Sliders/Slider150by11Disabled"
+        Engine.particleDecayKnob -> value := 500000 //not resetting value on init??
+        Engine.particleDecayKnob -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleDecayKnob -> POS_X := 569
+        Engine.particleDecayKnob -> POS_Y := Engine.particleTabSpacingY[1]
+
+        // ADD TO SETTINGS
+        GuiCallBacks.settingsSave[1, 67] := Engine.particleDecayKnob
+
+        Engine.particleDecayKnobLabel -> text := "Decay"
+        Engine.particleDecayKnobLabel -> FONT_TYPE := Engine.initFont
+        Engine.particleDecayKnobLabel -> width := 150
+
+        Engine.particleDecayKnobLabel -> POS_X := 569 - Engine.fxLabelTextOffsetX
+        Engine.particleDecayKnobLabel -> POS_Y := Engine.particleTabSpacingY[1] - Engine.fxLabelAbove
+        Engine.particleDecayKnobLabel -> hide := HIDE_PART_BG
+        Engine.particleDecayKnobLabel -> PARENT_PANEL := Engine.particleTabPanelID
+
+        // ADSR SUSTAIN KNOB
+        Engine.particleSustainKnob -> DEFAULT_VALUE := 1000000
+        Engine.particleSustainKnob -> MOUSE_BEHAVIOUR := 2170
+        Engine.particleSustainKnob -> PICTURE := "/Sliders/Slider150by11Disabled"
+        Engine.particleSustainKnob -> value := 0 //not resetting value on init??
+        Engine.particleSustainKnob -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleSustainKnob -> POS_X := 569
+        Engine.particleSustainKnob -> POS_Y := Engine.particleTabSpacingY[2]
+
+        // ADD TO SETTINGS
+        GuiCallBacks.settingsSave[1, 68] := Engine.particleSustainKnob
+
+        Engine.particleSustainKnobLabel -> text := "Sustain"
+        Engine.particleSustainKnobLabel -> FONT_TYPE := Engine.initFont
+        Engine.particleSustainKnobLabel -> width := 150
+
+        Engine.particleSustainKnobLabel -> POS_X := 569 - Engine.fxLabelTextOffsetX
+        Engine.particleSustainKnobLabel -> POS_Y := Engine.particleTabSpacingY[2] - Engine.fxLabelAbove
+        Engine.particleSustainKnobLabel -> hide := HIDE_PART_BG
+        Engine.particleSustainKnobLabel -> PARENT_PANEL := Engine.particleTabPanelID
+
+        // ADSR RELEASE KNOB
+        Engine.particleReleaseKnob -> DEFAULT_VALUE := 500000
+        Engine.particleReleaseKnob -> MOUSE_BEHAVIOUR := 2170
+        Engine.particleReleaseKnob -> PICTURE := "/Sliders/Slider150by11Disabled"
+        Engine.particleReleaseKnob -> value := 500000 //not resetting value on init??
+        Engine.particleReleaseKnob -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleReleaseKnob -> POS_X := 569
+        Engine.particleReleaseKnob -> POS_Y := Engine.particleTabSpacingY[3]
+
+        // ADD TO SETTINGS
+        GuiCallBacks.settingsSave[1, 69] := Engine.particleReleaseKnob
+
+        Engine.particleReleaseKnobLabel -> text := "Release"
+        Engine.particleReleaseKnobLabel -> FONT_TYPE := Engine.initFont
+        Engine.particleReleaseKnobLabel -> width := 150
+
+        Engine.particleReleaseKnobLabel -> POS_X := 569 - Engine.fxLabelTextOffsetX
+        Engine.particleReleaseKnobLabel -> POS_Y := Engine.particleTabSpacingY[3] - Engine.fxLabelAbove
+        Engine.particleReleaseKnobLabel -> hide := HIDE_PART_BG
+        Engine.particleReleaseKnobLabel -> PARENT_PANEL := Engine.particleTabPanelID
+
+
+        // ADSR attack CURVE
+        Engine.particleAttackCurveKnob -> DEFAULT_VALUE := 500000
+        Engine.particleAttackCurveKnob -> MOUSE_BEHAVIOUR := -600
+        Engine.particleAttackCurveKnob -> PICTURE := "/Knobs/AttackCharacterKnobDisabled"
+        Engine.particleAttackCurveKnob -> value := 500000 //not resetting value on init??
+        Engine.particleAttackCurveKnob -> PARENT_PANEL := Engine.particleTabPanelID
+        Engine.particleAttackCurveKnob -> POS_X := 569
+        Engine.particleAttackCurveKnob -> POS_Y := Engine.particleTabSpacingY[4] + 6
+
+        // ADD TO SETTINGS
+        GuiCallBacks.settingsSave[1, 70] := Engine.particleAttackCurveKnob
+
+        Engine.particleAttackCurveKnobLabel -> text := "Attack Curve"
+        Engine.particleAttackCurveKnobLabel -> FONT_TYPE := Engine.initFont
+        Engine.particleAttackCurveKnobLabel -> width := 150
+
+        Engine.particleAttackCurveKnobLabel -> POS_X := 569 - Engine.fxLabelTextOffsetX
+        Engine.particleAttackCurveKnobLabel -> POS_Y := Engine.particleTabSpacingY[4] - Engine.fxLabelAbove
+        Engine.particleAttackCurveKnobLabel -> hide := HIDE_PART_BG
+        Engine.particleAttackCurveKnobLabel -> PARENT_PANEL := Engine.particleTabPanelID
+
+
+    // particle labels
+    Engine.particleMixLabel -> PARENT_PANEL := Engine.particleTabPanelID
+    Engine.particleRateLabel -> PARENT_PANEL := Engine.particleTabPanelID
+    Engine.particleVariationLabel -> PARENT_PANEL := Engine.particleTabPanelID
+    Engine.particleOctaveLabel -> PARENT_PANEL := Engine.particleTabPanelID
+    Engine.particleSpreadLabel -> PARENT_PANEL := Engine.particleTabPanelID
+    Engine.particleVolVariationLabel -> PARENT_PANEL := Engine.particleTabPanelID
+
+
+    // ******************Particle Tab END************************
+
+    // random tab
+    Engine.randomTabLabel -> POS_X := 278
+    Engine.randomTabLabel -> POS_Y := 80
+    Engine.randomTabLabel -> PARENT_PANEL := get_ui_id(Engine.ranTabPanel)
+    Engine.randomTabLabel -> text := ""
+    Engine.randomTabLabel -> picture := "/Labels/RandomizeSamplesLabel.png"
+
+    while (i < 11)
+        Engine.randomPPLocks[i] -> POS_X := (i * 60) + 75
+        Engine.randomPPLocks[i] -> POS_Y := 270
+        Engine.randomPPLocks[i] -> height := 50
+        Engine.randomPPLocks[i] -> width := 50
+        Engine.randomFFLocks[i] -> POS_X := (i * 60) + 75
+        Engine.randomFFLocks[i] -> POS_Y := 210
+        Engine.randomFFLocks[i] -> height := 50
+        Engine.randomFFLocks[i] -> width := 50
+
+        Engine.randomPPLocks[i] -> FONT_TYPE := Engine.initFont
+
+        Engine.randomFFLocks[i] -> FONT_TYPE := Engine.initFont
+
+        Engine.randomPPLocks[i] -> DISABLE_TEXT_SHIFTING := 1
+        Engine.randomFFLocks[i] -> DISABLE_TEXT_SHIFTING := 1
+
+
+        Engine.randomPPLocks[i] -> PARENT_PANEL := Engine.ranTabPanelID
+        Engine.randomFFLocks[i] -> PARENT_PANEL := Engine.ranTabPanelID
+
+        Engine.randomPPLocks[i] -> text := ""
+        Engine.randomFFLocks[i] -> text := ""
+
+        Engine.randomPPLocks[i] -> picture := "/Buttons/MoonButton"
+        Engine.randomFFLocks[i] -> picture := "/Buttons/SparkleButton"
+
+        i := i + 1
+    end while
+    i := 0
+
+    Engine.lockRow[0] -> POS_X := 40 
+    Engine.lockRow[0] -> POS_Y := 281
+    Engine.lockRow[1] -> POS_X := 40 
+    Engine.lockRow[1] -> POS_Y := 221
+    Engine.lockRow[0] -> picture := "Lock-Button-Animated-Small"
+    Engine.lockRow[1] -> picture := "Lock-Button-Animated-Small"
+    Engine.lockRow[0] -> text := ""
+    Engine.lockRow[1] -> text := ""
+    Engine.lockRow[0] -> PARENT_PANEL := Engine.ranTabPanelID
+    Engine.lockRow[1] -> PARENT_PANEL := Engine.ranTabPanelID
+    Engine.lockRow[0] -> height := 28
+    Engine.lockRow[1] -> height := 28
+
+    while(i < 11)
+        Engine.lightUp[i] -> POS_X := (i * 60) + 98
+        Engine.lightUp[i] -> POS_Y := 270 + 60
+        Engine.lightUp[i] -> text := ""
+        Engine.lightUp[i] -> picture := "lightUpLabel"
+        Engine.lightUp[i] -> PARENT_PANEL := Engine.ranTabPanelID
+
+        i := i + 1
+    end while
+    i := 0
+
+    // Move Panels
+    move_control_px(Engine.ADSRPanel, 100, 200)
+    move_control_px(Engine.tabsPanel, 315, 16)
+    move_control_px(Engine.presetPanel, 26, 16)
+    move_control_px(Engine.presetBrowserPanel, 0, 31)
+    move_control_px(Engine.statePanel, 0, 0)
+
+    // Engine.tabs[1] -> hide := HIDE_WHOLE_CONTROL // hide unfinished arp button
+    // Engine.tabs[2] -> hide := HIDE_WHOLE_CONTROL // hide unfinished arp button
+
+    Engine.PresetBrowserPanel -> hide := HIDE_WHOLE_CONTROL
+
+    Engine.ADSRPanel -> hide := HIDE_WHOLE_CONTROL
+    Engine.FXPanel -> hide := HIDE_WHOLE_CONTROL //hide other 
+    Engine.ranTabPanel -> hide := HIDE_WHOLE_CONTROL //hide other controls
+    Engine.particleTabPanel -> hide := HIDE_WHOLE_CONTROL //hide other controls
+end macro

@@ -1,0 +1,266 @@
+macro PARTICLE_ON_NOTE_CB()
+	if (Engine.Tempo_sync = 0)
+		Engine.delay_time := 1000000 - (Engine.Free_knob * 1000)
+		if (Engine.delay_time < 2000)
+			Engine.delay_time := 2000
+		end if		
+		GuiCallBacks.variableSettingsSave[26] := Engine.delay_time
+	else
+		select (18 - Engine.Sync_knob)
+			case 0
+				Engine.delay_time := DURATION_SIXTEENTH / 8
+			case 1
+				Engine.delay_time := DURATION_SIXTEENTH / 4
+			case 2
+				Engine.delay_time := DURATION_SIXTEENTH / 2
+			case 3
+				Engine.delay_time := DURATION_QUARTER / 6
+			case 4
+				Engine.delay_time := (DURATION_SIXTEENTH / 4) * 3
+			case 5
+				Engine.delay_time := DURATION_SIXTEENTH
+			case 6
+				Engine.delay_time := DURATION_QUARTER / 3
+			case 7
+				Engine.delay_time := (DURATION_SIXTEENTH / 2) * 3
+			case 8
+				Engine.delay_time := DURATION_EIGHTH
+			case 9
+				Engine.delay_time := (DURATION_QUARTER * 2) / 3
+			case 10
+				Engine.delay_time := DURATION_SIXTEENTH * 3
+			case 11
+				Engine.delay_time := DURATION_QUARTER
+			case 12
+				Engine.delay_time := (DURATION_QUARTER * 4) / 3
+			case 13
+				Engine.delay_time := DURATION_EIGHTH * 3
+			case 14
+				Engine.delay_time := DURATION_QUARTER * 2
+			case 15
+				Engine.delay_time := DURATION_QUARTER * 3
+			case 16
+				Engine.delay_time := DURATION_QUARTER * 4
+			case 17
+				if (DURATION_BAR = 0)
+					Engine.delay_time := DURATION_QUARTER * 4
+				else
+					Engine.delay_time := DURATION_BAR
+				end if
+		end select
+	end if
+
+	Engine.timeVarCeiling := random(0, 2 * real_to_int((int_to_real(Engine.timeVariation) / 100.0) * int_to_real(Engine.delay_time)))
+	wait(Engine.delay_time + Engine.timeVarCeiling)
+
+	while (NOTE_HELD = 1)
+	    // used for choosing random sample start pos (COOL EFFECT)
+	    // set_controller(104, random(0, 100))
+
+   		Engine.art_id := play_note(EVENT_NOTE, EVENT_VELOCITY, 0, -1)
+
+   		if(Engine.particleOctave = 1)
+        	change_tune(Engine.art_id, 1200000 * random(0, 1), 1)
+   		end if
+
+   		if (Engine.particleOctave = 2)
+			Engine.numberChooser := random(0, 2)
+			select(Engine.numberChooser)
+				case 1
+        			change_tune(Engine.art_id, 1200000, 1)
+				case 2
+        			change_tune(Engine.art_id, 2400000, 1)
+        	end select
+   		end if
+
+   		change_pan(Engine.art_id, random(Engine.particleSpread * -1, Engine.particleSpread), 1)
+   			
+		change_vol(Engine.art_id, random(Engine.particleVolVariation * -1 , 0), 1)
+
+		Engine.timeVarCeiling := random(0, 2 * real_to_int((int_to_real(Engine.timeVariation) / 100.0) * int_to_real(Engine.delay_time)))
+		if(Engine.Tempo_sync = 0)
+			wait(Engine.delay_time + Engine.timeVarCeiling)
+		else
+			if (Engine.timeVarCeiling <= Engine.delay_time)
+				Engine.timeVarCeiling := 0
+			else
+				Engine.timeVarCeiling := Engine.delay_time
+			end if
+			
+			wait(Engine.delay_time + Engine.timeVarCeiling)
+		end if
+		note_off(Engine.art_id)
+	end while
+end macro
+
+macro PARTICLE_TAB_CALLBACKS()
+    on ui_control(Engine.particleMode)
+        Engine.footerDropletsButton -> value := Engine.particleMode
+
+
+        callbackContent(38) // TODO: this
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 38] := Engine.particleMode
+        GuiCallBacks.settingsSave[1, 73] := Engine.footerDropletsButton
+    end on
+
+    on ui_control (Engine.Tempo_sync)
+        callbackContent(39) // TODO: this
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 39] := Engine.Tempo_sync
+
+    end on
+
+    on ui_control(Engine.particleDryWet)
+        Engine.footerKnob2 -> value := Engine.particleDryWet
+        callbackContent(40) // TODO: this
+
+
+        set_text(Engine.particleMixLabel, round(int_to_real(Engine.particleDryWet) / 127.0 * 100.0) & "%")
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 40] := Engine.particleDryWet
+        GuiCallBacks.settingsSave[1, 34] := Engine.footerKnob2
+    end on
+
+    on ui_control (Engine.rate_knob)
+        callbackContent(41) // TODO: this
+
+        if(Engine.Tempo_sync = 0)
+        	set_text(Engine.particleRateLabel, round(int_to_real(Engine.rate_knob) / 10000.0) & "%")
+    	else 
+    		if (Engine.Sync_knob <= 1)
+				set_text(Engine.particleRateLabel, Engine.tempoNames[16])
+			else
+				set_text(Engine.particleRateLabel, Engine.tempoNames[18 - Engine.sync_knob])
+			end if
+    	end if
+
+        // ADD VALUE TO SETTINGS
+    end on
+
+    on ui_control (Engine.timeVariation)
+        callbackContent(42) // TODO: this
+
+        set_text(Engine.particleVariationLabel, Engine.timeVariation & "%")
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 42] := Engine.timeVariation
+    end on
+
+    on ui_control (Engine.particleOctave)
+        callbackContent(58) // TODO: this
+
+        set_text(Engine.particleOctaveLabel, Engine.particleOctave & " octaves")
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 58] := Engine.particleOctave
+    end on
+
+    on ui_control (Engine.particleSpread)
+        callbackContent(59) // TODO: this
+
+        set_text(Engine.particleSpreadLabel, round(int_to_real(Engine.particleSpread) / 10.0) & " %")
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 59] := Engine.particleSpread
+    end on
+
+    on ui_control (Engine.particleVolVariation)
+        callbackContent(60) // TODO: this
+        set_text(Engine.particleVolVariationLabel, round(int_to_real(Engine.particleVolVariation) * 0.005) & " %")
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 60] := Engine.particleVolVariation
+    end on
+
+    on ui_control (Engine.particleCrossfadeKnob)
+        callbackContent(61) // TODO: this
+        set_text(Engine.particleCrossfadeKnobLabel, Engine.particleCrossfadeKnob & " semitones")
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 61] := Engine.particleCrossfadeKnob
+    end on
+
+    on ui_control (Engine.particleReverseMode)
+        callbackContent(62) // TODO: this
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 62] := Engine.particleReverseMode
+    end on
+
+    on ui_control (Engine.particleStretchMode)
+        callbackContent(63) // TODO: this
+
+
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 63] := Engine.particleStretchMode
+    end on
+
+
+    on ui_control (Engine.particleStretchSpeed)
+        callbackContent(64) // TODO: this
+
+        set_text(Engine.particleStretchSpeedLabel, get_engine_par_disp(ENGINE_PAR_SPEED, 4, 0, -1) & "%")
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 64] := Engine.particleStretchSpeed
+    end on
+
+
+    on ui_control (Engine.particleStretchFormant)
+        callbackContent(65) // TODO: this
+
+        set_text(Engine.particleStretchFormantLabel, get_engine_par_disp(ENGINE_PAR_FORMANT_SHIFT, 4, 0, -1) & "%")
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 65] := Engine.particleStretchFormant
+    end on
+
+
+    on ui_control (Engine.particleAttackKnob)
+        callbackContent(66) // TODO: this
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 66] := Engine.particleAttackKnob
+    end on
+
+
+    on ui_control (Engine.particleDecayKnob)
+        callbackContent(67) // TODO: this
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 67] := Engine.particleDecayKnob
+    end on
+
+
+    on ui_control (Engine.particleSustainKnob)
+        callbackContent(68) // TODO: this
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 68] := Engine.particleSustainKnob
+    end on
+
+
+    on ui_control (Engine.particleReleaseKnob)
+        callbackContent(69) // TODO: this
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 69] := Engine.particleReleaseKnob
+    end on
+
+    on ui_control (Engine.particleAttackCurveKnob)
+        callbackContent(70) // TODO: this
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 70] := Engine.particleAttackCurveKnob
+    end on
+
+    on ui_control (Engine.particleFXButton)
+        callbackContent(71) // TODO: this
+
+        // ADD VALUE TO SETTINGS
+        GuiCallBacks.settingsSave[1, 71] := Engine.particleFXButton
+    end on
+
+end macro

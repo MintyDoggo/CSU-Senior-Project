@@ -1,0 +1,463 @@
+import "KeyColor.ksp"
+import "UserZone.ksp"
+import "GUI.ksp"
+import "ParticleTab.ksp"
+
+macro ENGINE_INITIALIZE
+    // load_performance_view( "perfview.nckp" )
+    make_perfview
+    set_script_title( "WholeGrain" )
+
+    set_ui_width_px(800)
+    set_ui_height_px(468)
+    // color and image
+    set_ui_color(99FB6A3h)
+    set_control_par_str(INST_WALLPAPER_ID, CONTROL_PAR_PICTURE,"background2.png")
+
+    set_snapshot_type(1)
+
+
+    family GuiCallBacks
+        declare %async_ID[512] := (-1)
+
+        // ****** for presets and state saves ******
+        declare @basepath
+        declare loadPresetArrayID[3]
+        declare const numUIElements := 80                       // # UI elements to save
+        declare const numVariables := 83                        // # variables   to save
+        declare pers %settingsSave[2, GuiCallBacks.numUIElements] := (0) // needs persistence
+        declare %previousValues[GuiCallBacks.numUIElements]
+        declare pers %variableSettingsSave[GuiCallBacks.numVariables] // needs persistence
+
+        declare pers %samplePathsIndexState[22] // needs persistence
+        declare %preSamplePathsIndexState[22]
+        // ****** for presets and state saves ******
+
+    end family
+
+
+    {Variable for looping}
+    declare i := 0
+    declare j := 0
+    declare k := 0
+    declare l := 0
+    declare loadArrayIterator := 0
+    declare listenerIterator := 0
+
+    family Engine
+        declare debugMode := 1
+        declare polyphonic new_id
+        declare polyphonic isParticle := 1
+        declare const num_unique_samples := 5
+        declare noteIsOn := 0
+        declare notesPlayingPerZone[11]
+        declare initFont := get_font_id("/Fonts/Font1-20p.png")
+        declare initFontFull := get_font_id("/Fonts/Font1.png")
+        declare UIElementIsChanging[GuiCallBacks.numUIElements] := (0)
+        declare lastUIChange := 0
+        declare const numDynamicLabels := 37 // change to number of sliders/ knobs (not buttons unless has dynamic label)
+        declare listenerCalls[Engine.numDynamicLabels] 
+        declare ~tmpVarForRounding
+
+        // PANELS
+        declare ui_panel mainTabPanel
+        declare ui_panel ADSRPanel
+        declare ui_panel tabsPanel
+        declare ui_panel presetPanel
+        declare ui_panel presetBrowserPanel
+        declare ui_panel statePanel
+        declare ui_panel FXPanel
+        declare ui_panel ranTabPanel
+        declare ui_panel particleTabPanel
+
+        declare mainTabPanelID := get_ui_id(Engine.mainTabPanel)
+        declare ADSRPanelID := get_ui_id(Engine.ADSRPanel)
+        declare presetPanelID := get_ui_id(Engine.presetPanel)
+        declare presetBrowserPanelID := get_ui_id(Engine.presetBrowserPanel)
+        declare tabsPanelID := get_ui_id(Engine.tabsPanel)
+        declare statePanelID := get_ui_id(Engine.statePanel)
+        declare FXPanelID := get_ui_id(Engine.FXPanel)
+        declare ranTabPanelID := get_ui_id(Engine.ranTabPanel)
+        declare particleTabPanelID := get_ui_id(Engine.particleTabPanel)
+
+
+        // ****** for presets and state saves ******
+        declare ui_button saveStateButton
+        declare ui_button loadStateButton
+        // ****** for presets and state saves ******
+
+        declare ui_switch scrambleButton
+        declare scrambleButtonID := get_ui_id(Engine.scrambleButton)
+
+        declare ui_switch scrambleButton2
+        declare scrambleButton2ID := get_ui_id(Engine.scrambleButton2)
+
+        declare ui_slider footerKnob0(0, 6)
+        declare ui_slider footerKnob1(0, 1000000)
+        declare ui_slider footerKnob2(0, 127)
+        declare ui_slider footerKnob3(0, 397000)
+        declare ui_slider footerKnob4(0, 397000)
+
+        declare ui_label footerLabels[5](1,1)
+
+        declare ui_switch footerBitcrushButton
+        declare ui_switch footerDropletsButton
+        declare ui_switch footerDelayButton
+        declare ui_switch footerReverbButton
+
+        declare ui_slider mainKnobMod(0, 127)
+        declare mainKnobModID := get_ui_id(Engine.mainKnobMod)
+
+        declare ui_label modBackgroundLabel(0,0)
+        declare ui_label modBackgroundLabelBlur(0,0)
+
+        // tabs
+        declare ui_switch tabs[3]
+
+        // presetMatrix
+        declare ui_switch presetDropDown
+        declare ui_button presetCategories[4]
+        declare currentCategory := 0
+        // declare ui_label catLightUp[4](0,0)
+
+        // which button to light up
+        declare ui_button presetPageIndex[7] // TODO add
+        declare presetColumn[7] // TODO add
+
+        // 4 categories, 7 presets, 2 pages
+        declare currentPresetState[4, 7, 2]
+
+        declare !presetNames[4, 16]
+
+        // holds the current page of each category (if currentpage[2] = 1, the third category is on the second page)
+        declare %currentPage[4] := (0, 0, 0, 0)
+        declare ui_switch nextPage
+        declare ui_switch page0Button
+        declare ui_switch page1Button
+        declare ui_switch prevPage
+        declare ui_label presetBrowserBackground(0,0)
+
+        // random TAB
+        declare ui_button randomPPLocks[11]
+        declare ui_button randomFFLocks[11]
+        declare lockedRandomizers[22]
+        declare ui_button lockRow[2]
+        declare numCurrentLocks[2]
+        declare ui_label lightUp[11](0,0)
+        declare ui_label randomTabLabel(1,1)
+
+
+        // FX TAB
+        declare const fxSpacing := 45
+        declare fxTabSpacingY[6]
+
+        while(i < 6)
+            Engine.fxTabSpacingY[i] := 121 + i * Engine.fxSpacing
+            i := i + 1
+        end while
+        i := 0
+
+        declare const fxLabelAbove := 14
+        declare const fxLabelTextOffsetX := 7
+
+
+
+            // Playback
+            declare ui_label playbackLabel(1,1)
+            declare ui_slider crossfadeKnob (0, 6)
+            declare ui_button reverseModeButton
+            declare ui_label crossfadeLabel (1, 1)
+
+
+            // STRETCH
+            declare ui_label stretchLabel(1,1)
+
+            declare ui_switch stretchOnOff
+            declare ui_slider stretchSpeed (0, 1000000)
+            declare ui_slider stretchFormant (0, 1000000)
+
+            declare ui_label stretchSpeedLabel (1, 1)
+            declare ui_label stretchFormantLabel (1, 1)
+
+
+
+            //ADSR
+            declare ui_label ADSRLabel(1,1)
+
+            declare ui_slider attackKnob (0, 1000000)
+            declare ui_slider decayKnob (0, 1000000)
+            declare ui_slider sustainKnob (0, 1000000)
+            declare ui_slider releaseKnob (0, 880000)
+            declare ui_slider attackCurveKnob (0, 1000000)
+            declare ui_button finishDecayButton
+            declare ui_label attackLabel (1, 1)
+            declare ui_label decayLabel (1, 1)
+            declare ui_label sustainLabel (1, 1)
+            declare ui_label releaseLabel (1, 1)
+            declare ui_label attackCurveLabel (1, 1)
+
+            // EQ
+            declare ui_switch eqOnOff
+            declare ui_label eqLabel (1,1)
+            declare ui_slider highShelf (0, 1000000)
+            declare ui_slider midBand (0, 1000000)
+            declare ui_slider lowShelf (0, 1000000)
+            declare ui_label highShelfLabel (1, 1)
+            declare ui_label midBandLabel (1, 1)
+            declare ui_label lowShelfLabel (1, 1)
+
+            // Bitcrush
+            declare ui_switch bitcrushOnOff
+            declare ui_label bitcrushLabel (1,1)
+            declare ui_slider sampleRate (0, 1000000)
+            declare ui_label sampleRateLabel (1,1)
+
+            declare ui_slider bits (0, 1000000)
+            declare ui_label bitsLabel (1,1)
+
+            // Delay
+            declare ui_switch delayOnOff
+            declare ui_label delayLabel (1,1)
+            declare ui_slider delayRate (0, 1000000)
+            declare ui_slider delayFeedback (0, 800000)
+            declare ui_slider delayMix (0, 397000)
+            declare ui_switch delayPingPong
+            declare ui_label delayRateLabel(1,1)
+            declare ui_label delayFeedbackLabel(1,1)
+            declare ui_label delayMixLabel(1,1)
+
+            // Reverb
+            declare ui_switch reverbOnOff
+            declare ui_label reverbLabel (1,1)
+            declare ui_slider reverbDecay (0, 1000000)
+            declare ui_slider reverbMix (0, 397000)
+            declare ui_switch reverbReverse
+            declare ui_label reverbDecayLabel(1,1)
+            declare ui_label reverbMixLabel(1,1)
+
+        // affect particle buttons and labels
+        declare ui_switch particleFXButton
+
+        // ****************particle TAB****************
+        declare const particleTabSpacing := 45
+        declare particleTabSpacingY[6]
+
+        while(i < 6)
+            Engine.particleTabSpacingY[i] := 121 + i * Engine.particleTabSpacing
+            i := i + 1
+        end while
+        i := 0
+
+
+        declare ui_switch particleMode
+        declare ui_switch Tempo_sync
+        declare ui_slider particleDryWet (0, 127) {10}
+        declare ui_slider Rate_knob (0, 1000000) {1}
+        declare ui_slider timeVariation (0, 100)
+        declare ui_slider particleOctave (0, 2)
+        declare ui_slider particleSpread (0, 1000)
+        declare ui_slider particleVolVariation (0, 20000)
+
+        declare ui_slider particleCrossfadeKnob (0, 6)
+        declare ui_button particleReverseMode
+
+        declare ui_switch particleStretchMode
+        declare ui_slider particleStretchSpeed (0, 1000000)
+        declare ui_slider particleStretchFormant (0, 1000000)
+
+
+        //ADSR
+        declare ui_slider particleAttackKnob (0, 1000000)
+        declare ui_slider particleDecayKnob (0, 1000000)
+        declare ui_slider particleSustainKnob (0, 1000000)
+        declare ui_slider particleReleaseKnob (0, 880000)
+        declare ui_slider particleAttackCurveKnob (0, 1000000)
+
+        declare ui_label particleMixLabel (1, 1)
+        declare ui_label particleRateLabel (1, 1)
+        declare ui_label particleVariationLabel (1, 1)
+        declare ui_label particleOctaveLabel (1, 1)
+        declare ui_label particleSpreadLabel (1, 1)
+        declare ui_label particleVolVariationLabel (1, 1)
+        declare ui_label particleCrossfadeKnobLabel (1, 1)
+
+        declare ui_label particleVariationSectionLabel (1, 1)
+        declare ui_label particlePlaybackLabel (1, 1)
+        declare ui_label particleMainLabel (1, 1)
+
+        declare ui_label particleStretchSectionLabel(1, 1)
+        declare ui_label particleStretchSpeedLabel(1, 1)
+        declare ui_label particleStretchFormantLabel(1, 1)
+
+        declare ui_label particleADSRLabel(1,1)
+        declare ui_label particleAttackKnobLabel(1, 1)
+        declare ui_label particleDecayKnobLabel(1, 1)
+        declare ui_label particleSustainKnobLabel(1, 1)
+        declare ui_label particleReleaseKnobLabel(1, 1)
+        declare ui_label particleAttackCurveKnobLabel(1, 1)
+
+        declare Free_knob := 500
+        declare Sync_knob := 5
+
+        declare particleModeID := get_ui_id(Engine.particleMode)
+        declare !noteClass[12]
+        declare !tempoNames[18]
+
+        declare polyphonic count
+
+        declare delay_time { the delay time in microseconds }
+
+        declare polyphonic art_id
+        declare polyphonic timeVarCeiling := 0
+        declare polyphonic numberChooser := 0
+    end family
+    GuiCallBacks.basepath := get_folder(GET_FOLDER_PATCH_DIR)
+    // message(GuiCallBacks.basepath)
+
+    // **********************UI SETTINGS*********************************
+    GuiCallBacks.settingsSave[0, 0] := get_ui_id(Engine.attackKnob)
+    GuiCallBacks.settingsSave[0, 1] := get_ui_id(Engine.decayKnob)
+    GuiCallBacks.settingsSave[0, 2] := get_ui_id(Engine.sustainKnob)
+    GuiCallBacks.settingsSave[0, 3] := get_ui_id(Engine.releaseKnob)
+    GuiCallBacks.settingsSave[0, 4] := get_ui_id(Engine.attackCurveKnob)
+    GuiCallBacks.settingsSave[0, 5] := get_ui_id(Engine.reverseModeButton)
+    GuiCallBacks.settingsSave[0, 6] := get_ui_id(Engine.finishDecayButton)
+    GuiCallBacks.settingsSave[0, 7] := get_ui_id(Engine.crossfadeKnob)
+
+    watch_array_idx(GuiCallBacks._settingsSave, 8)
+    watch_array_idx(GuiCallBacks._settingsSave, 9)
+    watch_array_idx(GuiCallBacks._settingsSave, 61)
+
+
+    while(i < 11)
+        // message("randomPPlocks at i: " & i & " is " & Engine.randomPPLocks[i])
+        GuiCallBacks.settingsSave[0, i + 8] := Engine.randomPPLocks[i]
+        GuiCallBacks.settingsSave[0, i + 11 + 8] := Engine.randomFFLocks[i]
+        i := i + 1
+    end while
+    i := 0
+    GuiCallBacks.settingsSave[0, 30] := Engine.lockRow[0]
+    GuiCallBacks.settingsSave[0, 31] := Engine.lockRow[1]
+
+    // footer knobs
+    GuiCallBacks.settingsSave[0, 32] := get_ui_id(Engine.footerKnob0)
+    GuiCallBacks.settingsSave[0, 33] := get_ui_id(Engine.footerKnob1)
+    GuiCallBacks.settingsSave[0, 34] := get_ui_id(Engine.footerKnob2)
+    GuiCallBacks.settingsSave[0, 35] := get_ui_id(Engine.footerKnob3)
+    GuiCallBacks.settingsSave[0, 36] := get_ui_id(Engine.footerKnob4)
+
+    // main page knobs
+    GuiCallBacks.settingsSave[0, 37] := Engine.mainKnobModID
+
+    // Particle tab ON/OFF switch
+    GuiCallBacks.settingsSave[0, 38] := Engine.particleModeID
+
+    // particle tab knobs
+    GuiCallBacks.settingsSave[0, 39] := get_ui_id(Engine.Tempo_sync)
+    GuiCallBacks.settingsSave[0, 40] := get_ui_id(Engine.particleDryWet)
+    GuiCallBacks.settingsSave[0, 41] := get_ui_id(Engine.Rate_knob)
+    GuiCallBacks.settingsSave[0, 42] := get_ui_id(Engine.timeVariation)
+
+    // FX tab
+    GuiCallBacks.settingsSave[0, 43] := get_ui_id(Engine.eqOnOff)
+    GuiCallBacks.settingsSave[0, 44] := get_ui_id(Engine.highShelf)
+    GuiCallBacks.settingsSave[0, 45] := get_ui_id(Engine.midBand)
+    GuiCallBacks.settingsSave[0, 46] := get_ui_id(Engine.lowShelf)
+
+    GuiCallBacks.settingsSave[0, 47] := get_ui_id(Engine.bitcrushOnOff)
+    GuiCallBacks.settingsSave[0, 48] := get_ui_id(Engine.sampleRate)
+
+    GuiCallBacks.settingsSave[0, 49] := get_ui_id(Engine.delayOnOff)
+    GuiCallBacks.settingsSave[0, 50] := get_ui_id(Engine.delayRate)
+    GuiCallBacks.settingsSave[0, 51] := get_ui_id(Engine.delayFeedback)
+    GuiCallBacks.settingsSave[0, 52] := get_ui_id(Engine.delayMix)
+    GuiCallBacks.settingsSave[0, 53] := get_ui_id(Engine.delayPingPong)
+
+    GuiCallBacks.settingsSave[0, 54] := get_ui_id(Engine.reverbOnOff)
+    GuiCallBacks.settingsSave[0, 55] := get_ui_id(Engine.reverbDecay)
+    GuiCallBacks.settingsSave[0, 56] := get_ui_id(Engine.reverbMix)
+    GuiCallBacks.settingsSave[0, 57] := get_ui_id(Engine.reverbReverse)
+
+    // particle tab continued
+    GuiCallBacks.settingsSave[0, 58] := get_ui_id(Engine.particleOctave)
+    GuiCallBacks.settingsSave[0, 59] := get_ui_id(Engine.particleSpread)
+    GuiCallBacks.settingsSave[0, 60] := get_ui_id(Engine.particleVolVariation)
+
+    GuiCallBacks.settingsSave[0, 61] := get_ui_id(Engine.particleCrossfadeKnob)
+    GuiCallBacks.settingsSave[0, 62] := get_ui_id(Engine.particleReverseMode)
+    GuiCallBacks.settingsSave[0, 63] := get_ui_id(Engine.particleStretchMode)
+    GuiCallBacks.settingsSave[0, 64] := get_ui_id(Engine.particleStretchSpeed)
+    GuiCallBacks.settingsSave[0, 65] := get_ui_id(Engine.particleStretchFormant)
+    GuiCallBacks.settingsSave[0, 66] := get_ui_id(Engine.particleAttackKnob)
+    GuiCallBacks.settingsSave[0, 67] := get_ui_id(Engine.particleDecayKnob)
+    GuiCallBacks.settingsSave[0, 68] := get_ui_id(Engine.particleSustainKnob)
+    GuiCallBacks.settingsSave[0, 69] := get_ui_id(Engine.particleReleaseKnob)
+    GuiCallBacks.settingsSave[0, 70] := get_ui_id(Engine.particleAttackCurveKnob)
+    GuiCallBacks.settingsSave[0, 71] := get_ui_id(Engine.particleFXButton)
+
+    GuiCallBacks.settingsSave[0, 72] := get_ui_id(Engine.footerBitcrushButton)
+    GuiCallBacks.settingsSave[0, 73] := get_ui_id(Engine.footerDropletsButton)
+    GuiCallBacks.settingsSave[0, 74] := get_ui_id(Engine.footerDelayButton)
+    GuiCallBacks.settingsSave[0, 75] := get_ui_id(Engine.footerReverbButton)
+
+    GuiCallBacks.settingsSave[0, 76] := get_ui_id(Engine.bits)
+
+    GuiCallBacks.settingsSave[0, 77] := get_ui_id(Engine.stretchOnOff)
+    GuiCallBacks.settingsSave[0, 78] := get_ui_id(Engine.stretchSpeed)
+    GuiCallBacks.settingsSave[0, 79] := get_ui_id(Engine.stretchFormant)
+
+    // continue initialization
+    GUI_INITIALIZE()
+
+    // **********************VARIABLE SETTINGS**********************
+    while(i < 22)
+        GuiCallBacks.variableSettingsSave[i] := Engine.lockedRandomizers[i]
+        i := i + 1
+    end while
+    i := 0
+    GuiCallBacks.variableSettingsSave[22] := Engine.numCurrentLocks[0]
+    GuiCallBacks.variableSettingsSave[23] := Engine.numCurrentLocks[1]
+
+    // particle variables
+    GuiCallBacks.variableSettingsSave[24] := Engine.Free_knob
+    GuiCallBacks.variableSettingsSave[25] := Engine.Sync_knob
+    GuiCallBacks.variableSettingsSave[26] := Engine.delay_time
+
+    // current preset state
+    while(i < 4)
+        while(j < 7)
+            while(k < 2)
+                GuiCallBacks.variableSettingsSave[27 + l] := Engine.currentPresetState[i, j, k]
+                l := l + 1
+                k := k + 1
+            end while
+            k := 0
+            j := j + 1
+        end while
+        j := 0
+        i := i + 1
+    end while
+    i := 0
+    l := 0
+
+    // the next one is:
+    // GuiCallBacks.variableSettingsSave[83] := 
+
+
+
+
+    // User zone initialize
+    USER_ZONE_INITIALIZE()
+
+    // initialize key colors
+    COLOR_KEYS()
+
+
+    // store previous path vals
+    while (i < GuiCallBacks.numUIElements)
+        // message("GuiCallBacks.settingsSave[1, " & i & "]: " & GuiCallBacks.settingsSave[1, i])
+        i := i + 1
+    end while
+    i := 0
+    set_listener($NI_SIGNAL_TIMER_MS, 100000)
+end macro
