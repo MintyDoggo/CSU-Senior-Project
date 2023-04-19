@@ -23,10 +23,11 @@ Hardware: Windows 10 PC, 32gb ram, Ryzen 2700 processor.
 [View Project Requirements](Senior_Project_Requirements.md)
 
 ## Project Implementation Description & Explanation
-  ##### This section details the design and features of the in paragraph form with references to the following:
+The design of the software is this: A main page which allows sample randimization and simple controls, a randomize page which allows you to specify randomization parameters, an fx page which allows the user to add fx as they wish, and a granular tab which allows the user to granulate the audio.  
 
-    #####screenshots with numbered captions (e.g., Fig 1. The loading screen.)
-    #####a link to the source code repository
+In scope: sample randomization, granulizer  
+
+Out of scope: Preset system, functional fx  
 
 ## Test Plan and Results
 [View Test Plan](test_plan.md)
