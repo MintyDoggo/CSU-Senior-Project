@@ -1,0 +1,147 @@
+macro FX_TAB_CALLBACKS()
+	on ui_control(Engine.eqOnOff)
+		callbackContent(43)
+    	GuiCallBacks.settingsSave[1, 43] := Engine.eqOnOff
+	end on
+
+	on ui_control(Engine.highShelf)
+		callbackContent(44)
+        set_text(Engine.highShelfLabel, get_engine_par_disp(ENGINE_PAR_SEQ_HF_GAIN, -1, 1, $NI_BUS_OFFSET) & " dB")
+
+    	GuiCallBacks.settingsSave[1, 44] := Engine.highShelf
+	end on
+
+	on ui_control(Engine.midBand)
+		callbackContent(45)
+        set_text(Engine.midBandLabel, get_engine_par_disp(ENGINE_PAR_SEQ_LMF_GAIN, -1, 1, $NI_BUS_OFFSET) & " dB")
+
+    	GuiCallBacks.settingsSave[1, 45] := Engine.midBand
+	end on
+
+	on ui_control(Engine.lowShelf)
+		callbackContent(46)
+        set_text(Engine.lowShelfLabel, get_engine_par_disp(ENGINE_PAR_SEQ_LF_GAIN, -1, 1, $NI_BUS_OFFSET) & " dB")
+
+    	GuiCallBacks.settingsSave[1, 46] := Engine.lowShelf
+	end on
+
+	on ui_control(Engine.bitcrushOnOff)
+        Engine.footerBitcrushButton -> value := Engine.bitcrushOnOff
+
+		callbackContent(47)
+    	GuiCallBacks.settingsSave[1, 47] := Engine.bitcrushOnOff
+        GuiCallBacks.settingsSave[1, 72] := Engine.footerBitcrushButton
+
+	end on
+
+	on ui_control(Engine.sampleRate)
+        Engine.footerKnob1 -> value := Engine.sampleRate
+
+		callbackContent(48)
+        set_text(Engine.sampleRateLabel, get_engine_par_disp(ENGINE_PAR_FREQUENCY, -1, 0, $NI_BUS_OFFSET) & " hz")
+
+    	GuiCallBacks.settingsSave[1, 48] := Engine.sampleRate
+    	GuiCallBacks.settingsSave[1, 33] := Engine.footerKnob1
+	end on
+
+	on ui_control(Engine.delayOnOff)
+        Engine.footerDelayButton -> value := Engine.delayOnOff
+
+		callbackContent(49)
+    	GuiCallBacks.settingsSave[1, 49] := Engine.delayOnOff
+        GuiCallBacks.settingsSave[1, 74] := Engine.footerDelayButton
+	end on
+
+	on ui_control(Engine.delayRate)
+		callbackContent(50)
+        set_text(Engine.delayRateLabel, get_engine_par_disp(ENGINE_PAR_RDL_TIME, -1, 2, $NI_BUS_OFFSET) & " hz")
+
+    	GuiCallBacks.settingsSave[1, 50] := Engine.delayRate
+	end on
+
+	on ui_control(Engine.delayFeedback)
+		callbackContent(51)
+        set_text(Engine.delayFeedbackLabel, round(int_to_real(Engine.delayFeedback) / 8100.0) & "%")
+
+    	GuiCallBacks.settingsSave[1, 51] := Engine.delayFeedback
+	end on
+
+	on ui_control(Engine.delayMix)
+        Engine.footerKnob3 -> value := Engine.delayMix
+
+		callbackContent(52)
+
+        set_text(Engine.delayMixLabel, get_engine_par_disp(ENGINE_PAR_INSERT_EFFECT_OUTPUT_GAIN, -1, 2, $NI_BUS_OFFSET) & " dB")
+
+    	GuiCallBacks.settingsSave[1, 52] := Engine.delayMix
+        GuiCallBacks.settingsSave[1, 35] := Engine.footerKnob3
+	end on
+
+	on ui_control(Engine.delayPingPong)
+		callbackContent(53)
+    	GuiCallBacks.settingsSave[1, 53] := Engine.delayPingPong
+	end on
+
+	on ui_control(Engine.reverbOnOff)
+        Engine.footerReverbButton -> value := Engine.reverbOnOff
+
+		callbackContent(54)
+
+    	GuiCallBacks.settingsSave[1, 54] := Engine.reverbOnOff
+        GuiCallBacks.settingsSave[1, 75] := Engine.footerReverbButton
+	end on
+
+	on ui_control(Engine.reverbDecay)
+		callbackContent(55)
+
+        set_text(Engine.reverbDecayLabel, round(int_to_real(Engine.reverbDecay) / 10000.0) & " %")
+
+    	GuiCallBacks.settingsSave[1, 55] := Engine.reverbDecay
+	end on
+
+	on ui_control(Engine.reverbMix)
+        Engine.footerKnob4 -> value := Engine.reverbMix
+
+		callbackContent(56)
+
+        set_text(Engine.reverbMixLabel, get_engine_par_disp(ENGINE_PAR_INSERT_EFFECT_OUTPUT_GAIN, -1, 3, $NI_BUS_OFFSET) & " dB")
+
+    	GuiCallBacks.settingsSave[1, 56] := Engine.reverbMix
+        GuiCallBacks.settingsSave[1, 36] := Engine.footerKnob4
+	end on
+
+	on ui_control(Engine.reverbReverse)
+		callbackContent(57)
+    	GuiCallBacks.settingsSave[1, 57] := Engine.reverbReverse
+	end on
+
+	on ui_control(Engine.bits)
+		callbackContent(72)
+
+        set_text(Engine.bitsLabel, get_engine_par_disp(ENGINE_PAR_BITS, -1, 0, $NI_BUS_OFFSET))
+   		GuiCallBacks.settingsSave[1, 76] := Engine.bits
+	end on
+
+	on ui_control(Engine.stretchOnOff)
+		callbackContent(77)
+		
+        // set_text(Engine.bitsLabel, get_engine_par_disp(ENGINE_PAR_BITS, -1, 0, $NI_BUS_OFFSET))
+   		GuiCallBacks.settingsSave[1, 77] := Engine.stretchOnOff
+	end on
+
+	on ui_control(Engine.stretchSpeed)
+		callbackContent(78)
+
+         set_text(Engine.stretchSpeedLabel, get_engine_par_disp(ENGINE_PAR_SPEED, 6, 0, -1) & "%")
+   		GuiCallBacks.settingsSave[1, 78] := Engine.stretchSpeed
+	end on
+
+	on ui_control(Engine.stretchFormant)
+		callbackContent(79)
+
+         set_text(Engine.stretchFormantLabel, get_engine_par_disp(ENGINE_PAR_FORMANT_SHIFT, 6, 0, -1) & "%")
+
+        // set_text(Engine.bitsLabel, get_engine_par_disp(ENGINE_PAR_BITS, -1, 0, $NI_BUS_OFFSET))
+   		GuiCallBacks.settingsSave[1, 79] := Engine.stretchFormant
+	end on
+end macro

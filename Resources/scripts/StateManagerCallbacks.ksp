@@ -1,0 +1,155 @@
+macro STATE_MANAGER_CALLBACKS
+    // SAVE STATE BUTTON
+    on ui_control (Engine.saveStateButton)
+        // save/overright state array
+        message("Start Save")
+
+        save_array_str(GuiCallBacks._settingsSave, GuiCallBacks.basepath & "Data/" & Engine.currentCategory & "-" & search(Engine.presetColumn, 1) & "-" & Engine.currentPage[Engine.currentCategory] & "_UISettings.nka")
+        save_array_str(GuiCallBacks.samplePathsIndexState, GuiCallBacks.basepath & "Data/" & Engine.currentCategory & "-" & search(Engine.presetColumn, 1) & "-" & Engine.currentPage[Engine.currentCategory] & "_PathSettings.nka")
+        save_array_str(GuiCallBacks.variableSettingsSave, GuiCallBacks.basepath & "Data/" & Engine.currentCategory & "-" & search(Engine.presetColumn, 1) & "-" & Engine.currentPage[Engine.currentCategory] & "_VariableSettings.nka")
+
+        message("State Saved!")
+    end on
+
+    // LOAD STATE BUTTON
+    on ui_control (Engine.loadStateButton)
+        // store previous vals
+        while (i < GuiCallBacks.numUIElements)
+            GuiCallBacks.previousValues[i] := GuiCallBacks.settingsSave[1, i]
+            i := i + 1
+        end while
+        i := 0
+
+        // store previous path vals
+        while (i < 22)
+            GuiCallBacks.preSamplePathsIndexState[i] := GuiCallBacks.samplePathsIndexState[i]
+            // message("BEFOREsamplePathsIndexState[" & i & "]: " & GuiCallBacks.samplePathsIndexState[i])
+            i := i + 1
+        end while
+        i := 0
+
+        // load array
+        GuiCallBacks.loadPresetArrayID[0] := load_array_str(GuiCallBacks._settingsSave, GuiCallBacks.basepath & "Data/USER_STATE_SAVE.nka")
+        GuiCallBacks.loadPresetArrayID[1] := load_array_str(GuiCallBacks.samplePathsIndexState, GuiCallBacks.basepath & "Data/USER_STATE_SAVE_PATHS.nka")
+        GuiCallBacks.loadPresetArrayID[2] := load_array_str(GuiCallBacks.variableSettingsSave, GuiCallBacks.basepath & "Data/USER_STATE_SAVE_VARIABLES.nka")
+
+        while (GuiCallBacks.loadPresetArrayID[0] # -1)
+            wait(1)
+        end while
+
+        while (GuiCallBacks.loadPresetArrayID[1] # -1)
+            wait(1)
+        end while
+
+        while (GuiCallBacks.loadPresetArrayID[2] # -1)
+            wait(1)
+        end while
+
+        // GuiCallBacks.loadPresetArrayID[0] := -1
+        // GuiCallBacks.loadPresetArrayID[1] := -1
+        // GuiCallBacks.loadPresetArrayID[2] := -1
+
+        loadPreset(0)
+
+    end on
+
+end macro
+
+
+
+function loadPreset(isPCCB)
+    message("Begin Load... ... ...")
+
+    // ***************************variable setting***************************
+    while(i < 22)
+        Engine.lockedRandomizers[i] := GuiCallBacks.variableSettingsSave[i]
+        i := i + 1
+    end while
+    i := 0
+    Engine.numCurrentLocks[0] := GuiCallBacks.variableSettingsSave[22]
+    Engine.numCurrentLocks[1] := GuiCallBacks.variableSettingsSave[23]
+
+    // particle variables
+    Engine.Free_knob := GuiCallBacks.variableSettingsSave[24]
+    Engine.Sync_knob := GuiCallBacks.variableSettingsSave[25]
+    Engine.delay_time := GuiCallBacks.variableSettingsSave[26]
+
+    // current preset state
+    while(i < 4)
+        while(j < 7)
+            // Engine.presetColumn[j] := 0
+            while(k < 2)
+                Engine.currentPresetState[i, j, k] := GuiCallBacks.variableSettingsSave[27 + l]
+                // message("current Preset state[" & i & ", " & j & ", " & k & "]: " & Engine.currentPresetState[i, j, k])
+
+                // if(GuiCallBacks.variableSettingsSave[27 + l] = 1)
+
+                // end if
+                l := l + 1
+                k := k + 1
+            end while
+            k := 0
+            j := j + 1
+        end while
+        j := 0
+        i := i + 1
+    end while
+    i := 0
+    l := 0
+    // ***************************variable setting***************************
+
+    // set all param values
+    while( loadArrayIterator < GuiCallBacks.numUIElements )
+        // message("setting number: " & loadArrayIterator & " (is " & GuiCallBacks.settingsSave[0, loadArrayIterator] & ", " & GuiCallBacks.settingsSave[1, loadArrayIterator] & ")")
+        set_control_par(GuiCallBacks.settingsSave[0, loadArrayIterator], CONTROL_PAR_VALUE, GuiCallBacks.settingsSave[1, loadArrayIterator])
+
+        // if value changed, run its callback
+        if (GuiCallBacks.previousValues[loadArrayIterator] # GuiCallBacks.settingsSave[1, loadArrayIterator] or isPCCB = 1)
+            callbackContent(loadArrayIterator)
+        end if
+
+        loadArrayIterator := loadArrayIterator + 1
+    end while
+    loadArrayIterator := 0
+
+    
+
+    // set proper samples
+    while (i < 22)
+        // if needs to be changed, change it
+        if (GuiCallBacks.preSamplePathsIndexState[i] # GuiCallBacks.samplePathsIndexState[i] or isPCCB = 1)
+            // message("Made it, needs to be changed at i = " & i)
+            GuiCallBacks.async_ID[j] := set_sample(%NI_USER_ZONE_IDS[i], atmosSamplePaths[GuiCallBacks.samplePathsIndexState[i], i])
+            j := j + 1
+            GuiCallBacks.async_ID[j] := set_sample(%NI_USER_ZONE_IDS[i + 22], atmosSamplePaths[GuiCallBacks.samplePathsIndexState[i], i])
+            j := j + 1
+            GuiCallBacks.async_ID[j] := set_sample(%NI_USER_ZONE_IDS[i + 44], atmosSamplePaths[GuiCallBacks.samplePathsIndexState[i], i])
+            j := j + 1
+            GuiCallBacks.async_ID[j] := set_sample(%NI_USER_ZONE_IDS[i + 66], atmosSamplePaths[GuiCallBacks.samplePathsIndexState[i], i])
+            j := j + 1
+
+            changePictureToSample(i)
+        end if
+        i := i + 1
+
+    end while
+    i := 0
+
+    // collect async ids in j since we used j earlier
+    while (GuiCallBacks.async_ID[j] > -1)
+        wait_async(GuiCallBacks.async_ID[j])
+        j := j + 1
+    end while
+    j := 0
+
+    // re-initialize async_ID
+    while (i < 512)
+        GuiCallBacks.async_ID[i] := -1
+        i := i + 1
+    end while
+    i := 0
+
+    call setLoopModes()
+
+    message("State Loaded!")
+end function

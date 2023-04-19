@@ -1,0 +1,429 @@
+on init
+  set_ui_height(4)
+
+  declare $a
+  declare $wet
+  declare $dry
+  declare ~countRemap
+  declare ~vDecRemap
+  declare ~tDecRemap
+  declare ~pitchRemap {todo}
+
+  ~countRemap := 1.0
+  ~vDecRemap := 100.0
+  ~tDecRemap := 100.0
+  ~pitchRemap := 0.0
+
+  declare !note_class[12]
+  !note_class[0] := "C"
+  !note_class[1] := "C#"
+  !note_class[2] := "D"
+  !note_class[3] := "D#"
+  !note_class[4] := "E"
+  !note_class[5] := "F"
+  !note_class[6] := "F#"
+  !note_class[7] := "G"
+  !note_class[8] := "G#"
+  !note_class[9] := "A"
+  !note_class[10] := "A#"
+  !note_class[11] := "B"
+
+  declare ui_slider $DryWet (-500, 500) {10}
+  {set_knob_defval($DryWet, 0)}
+  set_control_par_str(get_ui_id($drywet),$CONTROL_PAR_TEXT,"Dry/Wet")
+  {set_knob_unit($DryWet, $KNOB_UNIT_DB)}
+  declare ui_slider $Repeat (1, 100) {1}
+  {set_knob_defval($Repeat, 1)}
+  $Repeat := 1
+  declare ui_slider $Transp (-12, 12) {1}
+  {set_knob_defval($Transp, 0)}
+  {set_knob_unit($Transp, $KNOB_UNIT_ST)}
+  $Transp := 0
+  declare $Tune
+  $Tune := 0
+  declare ui_slider $Tune_knob (-100, 100) {100}
+  {set_knob_defval($Tune_knob, 0)}
+  {set_knob_unit($Tune_knob, $KNOB_UNIT_ST)}
+  $Tune_knob := 0
+  set_control_par_str(get_ui_id($Tune_knob),$CONTROL_PAR_TEXT,"Tune")
+  declare ui_slider $Length (1, 200) {1}
+  {set_knob_defval($Length, 100)}
+  {set_knob_unit($Length, $KNOB_UNIT_PERCENT)}
+  $Length := 100
+  declare ui_slider $Ldec (1, 200) {1}
+  {set_knob_defval($Ldec, 100)}
+  {set_knob_unit($Ldec, $KNOB_UNIT_PERCENT)}
+  set_control_par_str(get_ui_id($ldec),$CONTROL_PAR_TEXT,"Duration")
+  $Ldec := 100
+
+  declare !tempo_names[18]
+  !tempo_names[0] := "1/128"
+  !tempo_names[1] := "1/64"
+  !tempo_names[2] := "1/32"
+  !tempo_names[3] := "1/16 T"
+  !tempo_names[4] := "3/64"
+  !tempo_names[5] := "1/16"
+  !tempo_names[6] := "1/8 T"
+  !tempo_names[7] := "3/32"
+  !tempo_names[8] := "1/8"
+  !tempo_names[9] := "1/4 T"
+  !tempo_names[10] := "3/16"
+  !tempo_names[11] := "1/4"
+  !tempo_names[12] := "1/2 T"
+  !tempo_names[13] := "3/8"
+  !tempo_names[14] := "1/2"
+  !tempo_names[15] := "3/4"
+  !tempo_names[16] := "4/4"
+  !tempo_names[17] := "Bar"
+
+  declare ui_switch $Tempo_sync
+  set_control_par_str(get_ui_id($Tempo_sync),$CONTROL_PAR_TEXT,"Tempo Sync")
+  $Tempo_sync := 1
+
+  declare ui_slider $Rate_knob (0, 1000000) {1}
+  set_control_par_str(get_ui_id($Rate_knob),$CONTROL_PAR_TEXT,"Rate")
+
+  declare $Free_knob := 500
+  make_persistent($Free_knob)
+
+  declare $Sync_knob := 5
+  make_persistent($sync_knob)
+
+  declare $Beat_div := 250
+  make_persistent($beat_div)
+
+  declare ui_label $Timing_label (6, 1)
+  set_control_par_str(get_ui_id($Timing_label),$CONTROL_PAR_TEXT,"Timing")
+
+  declare ui_label $Velocity_label (2, 1)
+  set_control_par_str(get_ui_id($Velocity_label),$CONTROL_PAR_TEXT,"Velocity")
+
+  declare ui_label $Pitch_label (2, 1)
+  set_control_par_str(get_ui_id($Pitch_label),$CONTROL_PAR_TEXT,"Pitch")
+
+  declare ui_label $Settings_label (2, 1)
+  set_control_par_str(get_ui_id($Settings_label),$CONTROL_PAR_TEXT,"Settings")
+
+  declare ui_slider $Tdec (1, 200) {1}
+  {set_knob_defval($tdec, 100)}
+  {set_knob_unit($tdec, $KNOB_UNIT_PERCENT)}
+  set_control_par_str(get_ui_id($Tdec),$CONTROL_PAR_TEXT,"Decay")
+
+  $Tdec := 200
+  declare ui_slider $vdec (1, 200) {1}
+  {set_knob_defval($vdec, 100)}
+  {set_knob_unit($vdec, $KNOB_UNIT_PERCENT)}
+  set_control_par_str(get_ui_id($vdec),$CONTROL_PAR_TEXT,"Decay")
+
+  $vdec := 100
+
+  $Tune_knob := $Tune / 1000
+
+  declare polyphonic $count
+  declare polyphonic $duration { this is the duration of the repeated note }
+  declare polyphonic $duration2
+
+  declare $delay_time { the delay time in microseconds }
+
+  declare polyphonic $Transp2
+  declare polyphonic $Velocity  { this is the velocity of the repeated note }
+  declare polyphonic $Velocitydelta { used for Vel: Last Setting }
+
+  declare polyphonic $art_id
+  declare polyphonic $Tune2
+
+  declare polyphonic $delay_time2
+
+  move_control($Repeat, 3, 3)
+  move_control($Transp, 6, 7)
+  move_control($Tune_knob, 5, 7)
+  move_control($Length, 5, 3)
+  move_control($Ldec, 6, 3)
+
+  move_control($Tempo_sync, 1, 3)
+  move_control($rate_knob, 2, 3)
+  move_control($Tdec, 4, 3)
+
+  move_control($vdec, 4, 7)
+
+  move_control($drywet, 2, 7)
+
+  move_control($Timing_label, 1, 2)
+  move_control($Velocity_label, 3, 6)
+  move_control($Pitch_label, 5, 6)
+  move_control($Settings_label, 1, 6)
+
+  read_persistent_var($Drywet)
+
+  if ($Tempo_sync = 0)
+    $Rate_knob := (($free_knob - 20) * 1000000) / 980
+{    set_knob_defval($Rate_knob, 489796)
+    set_knob_label($Rate_knob, ($free_knob / 1000) & "." & (($free_knob mod 1000) / 100) & "" & (($free_knob mod 100) / 10) & "" & (($free_knob mod 10)))
+    set_knob_unit($Rate_knob, $KNOB_UNIT_MS)}
+  else
+{    $Rate_knob := ($sync_knob * 1000001) / 17
+    set_knob_defval($Rate_knob, (5 * 1000001) / 17)
+    set_knob_label($Rate_knob, !tempo_names[$sync_knob])
+    set_knob_unit($Rate_knob, $KNOB_UNIT_NONE)}
+  end if
+
+  if ($Drywet <= 0)
+    $Dry := 0
+    $Wet := $drywet * 10
+    {set_knob_label($drywet, $drywet / 10 & "." & abs($drywet) mod 10)}
+  else
+    $wet := 0
+    $dry := -$drywet * 10
+    {set_knob_label($drywet, "-" & $drywet / 10 & "." & $drywet mod 10)}
+  end if
+
+end on
+
+on note
+  if ($Tempo_sync = 0)
+    $delay_time := $Free_knob * 1000
+  else
+    select ($Sync_knob)
+      case 0
+        $delay_time := $DURATION_SIXTEENTH / 8
+      case 1
+        $delay_time := $DURATION_SIXTEENTH / 4
+      case 2
+        $delay_time := $DURATION_SIXTEENTH / 2
+      case 3
+        $delay_time := $DURATION_QUARTER / 6
+      case 4
+        $delay_time := ($DURATION_SIXTEENTH / 4) * 3
+      case 5
+        $delay_time := $DURATION_SIXTEENTH
+      case 6
+        $delay_time := $DURATION_QUARTER / 3
+      case 7
+        $delay_time := ($DURATION_SIXTEENTH / 2) * 3
+      case 8
+        $delay_time := $DURATION_EIGHTH
+      case 9
+        $delay_time := ($DURATION_QUARTER * 2) / 3
+      case 10
+        $delay_time := $DURATION_SIXTEENTH * 3
+      case 11
+        $delay_time := $DURATION_QUARTER
+      case 12
+        $delay_time := ($DURATION_QUARTER * 4) / 3
+      case 13
+        $delay_time := $DURATION_EIGHTH * 3
+      case 14
+        $delay_time := $DURATION_QUARTER * 2
+      case 15
+        $delay_time := $DURATION_QUARTER * 3
+      case 16
+        $delay_time := $DURATION_QUARTER * 4
+      case 17
+        if ($DURATION_BAR = 0)
+          $delay_time := $DURATION_QUARTER * 4
+        else
+          $delay_time := $DURATION_BAR
+        end if
+    end select
+  end if
+
+  $count := 1
+  $Transp2 := $Transp
+  $Tune2 := $Tune
+  $delay_time2 := $delay_time
+
+  change_vol($EVENT_ID, $Dry * 10, 0)
+
+  { find velocity of the first repeated note }
+  if ((($EVENT_VELOCITY * $Vdec) / 100) < 1)
+    $Velocity := 1
+  else
+    if ((($EVENT_VELOCITY * $Vdec) / 100) > 127)
+      $Velocity := 127
+    else
+      $Velocity := ($EVENT_VELOCITY * $Vdec) / 100
+    end if
+  end if
+
+
+  { find delay time }
+  if ($Tempo_sync = 0)
+    $delay_time2 := $Free_knob * 1000
+  else
+    select ($Sync_knob)
+      case 0
+        $delay_time2 := $DURATION_SIXTEENTH / 8
+      case 1
+        $delay_time2 := $DURATION_SIXTEENTH / 4
+      case 2
+        $delay_time2 := $DURATION_SIXTEENTH / 2
+      case 3
+        $delay_time2 := $DURATION_QUARTER / 6
+      case 4
+        $delay_time2 := ($DURATION_SIXTEENTH / 4) * 3
+      case 5
+        $delay_time2 := $DURATION_SIXTEENTH
+      case 6
+        $delay_time2 := $DURATION_QUARTER / 3
+      case 7
+        $delay_time2 := ($DURATION_SIXTEENTH / 2) * 3
+      case 8
+        $delay_time2 := $DURATION_EIGHTH
+      case 9
+        $delay_time2 := ($DURATION_QUARTER * 2) / 3
+      case 10
+        $delay_time2 := $DURATION_SIXTEENTH * 3
+      case 11
+        $delay_time2 := $DURATION_QUARTER
+      case 12
+        $delay_time2 := ($DURATION_QUARTER * 4) / 3
+      case 13
+        $delay_time2 := $DURATION_EIGHTH * 3
+      case 14
+        $delay_time2 := $DURATION_QUARTER * 2
+      case 15
+        $delay_time2 := $DURATION_QUARTER * 3
+      case 16
+        $delay_time2 := $DURATION_QUARTER * 4
+      case 17
+        if ($DURATION_BAR = 0)
+          $delay_time2 := $DURATION_QUARTER * 4
+        else
+          $delay_time2 := $DURATION_BAR
+        end if
+    end select
+  end if
+
+  wait($delay_time2)
+
+  if ($NOTE_HELD = 1)
+    note_off($EVENT_ID)
+    $duration := $delay_time
+  else
+    $duration := $duration2
+  end if
+
+  $duration := ($duration * $Length)  /  100
+
+  if ($duration < 5000)
+    $duration := 5000
+  end if
+  message("")
+  message(real_to_int(~countRemap))
+  while ($count <= real_to_int(~countRemap) )
+    if (in_range ($EVENT_NOTE + $Transp2, 1, 127))
+      $art_id := play_note($EVENT_NOTE + $Transp2, $Velocity, 0, $duration)
+      change_tune($art_id, $Tune2 , 1)
+      change_vol($art_id, $Wet * 10, 0)
+      $Tune2 := $Tune + $Tune2
+      inc($count)
+    else
+      if ($EVENT_NOTE + $Transp2 > 127)
+        $art_id := play_note(127, $Velocity, 0, $duration)
+        change_tune($art_id, $Tune2 , 1)
+        change_vol($art_id, $Wet * 10, 0)
+        $Tune2 := $Tune + $Tune2
+        inc($count)
+
+      else
+        $art_id := play_note(1, $Velocity, 0, $duration)
+        change_tune($art_id, $Tune2 , 1)
+        change_vol($art_id, $Wet * 10, 0)
+        $Tune2 := $Tune + $Tune2
+        inc($count)
+      end if
+    end if
+
+    if ($Transp > 0)
+      $Transp2 := $Transp2 + $Transp
+    else
+      if ($Transp < 0)
+        $Transp2 := $Transp2 + $Transp
+      end if
+    end if
+
+    { find velocity of the consecutive repeated notes }
+    if ((($Velocity * $Vdec) / 100) < 1)
+      $Velocity := 1
+    else
+      if ((($Velocity * $Vdec) / 100) > 127)
+        $Velocity := 127
+      else
+        $Velocity := ($Velocity * $Vdec) / 100
+      end if
+    end if
+
+    $duration := ($duration * $Ldec) / 100
+
+    if ($duration < 5000)
+      $duration := 5000
+    end if
+
+    if ((($delay_time2 * real_to_int(~tDecRemap)) / 100) < 1000)
+      $delay_time2 := 1000
+    else
+      $delay_time2 := ($delay_time2 * real_to_int(~tDecRemap)) / 100
+    end if
+
+    wait($delay_time2)
+  end while
+end on
+
+on release
+  $duration2 := %NOTE_DURATION[$EVENT_NOTE]
+end on
+
+on ui_control($Drywet)
+  if ($Drywet <= 0)
+    $Dry := 0
+    $Wet := $drywet * 10
+    {set_knob_label($drywet, $drywet / 10 & "." & abs($drywet) mod 10)}
+  else
+    $wet := 0
+    $dry := -$drywet * 10
+    {set_knob_label($drywet, "-" & $drywet / 10 & "." & $drywet mod 10)}
+  end if
+end on
+
+on ui_control ($Repeat)
+    {change 20.0 to change slope}
+    ~countRemap := ((pow(20.0, (int_to_real($Repeat) / 100.0)) - 1.0) / (20.0 - 1.0)) * 100.0
+    if(real_to_int(~countRemap) < 1)
+      ~countRemap := 1.0
+    end if
+end on 
+
+on ui_control ($Tdec)
+    {change 100.0 to change slope, change 200.0 to the max val}
+    ~tDecRemap := ((((pow(100.0, ((int_to_real($Tdec) - 1.0) / 199.0)) - 1.0) / (100.0 - 1.0)) - 1.0) * -1.0) * 100.0
+    if(real_to_int(~tDecRemap) < 1)
+      ~tDecRemap := 1.0
+    end if
+
+end on
+
+on ui_control ($Tempo_sync)
+  if ($Tempo_sync = 0)
+    $Rate_knob := (($free_knob - 20) * 1000000) / 980
+{    set_knob_defval($Rate_knob, 489796)
+    set_knob_label($Rate_knob, ($free_knob / 1000) & "." & (($free_knob mod 1000) / 100) & "" & (($free_knob mod 100) / 10) & "" & (($free_knob mod 10)))
+    set_knob_unit($Rate_knob, $KNOB_UNIT_MS)}
+  else
+    $Rate_knob := ($sync_knob * 1000001) / 17
+{    set_knob_defval($Rate_knob, (5 * 1000001) / 17)
+    set_knob_label($Rate_knob, !tempo_names[$sync_knob])
+    set_knob_unit($Rate_knob, $KNOB_UNIT_NONE)}
+  end if
+
+end on
+
+on ui_control ($rate_knob)
+  if ($Tempo_sync = 0)
+    $free_knob := (($rate_knob * 980) / 1000000) + 20
+    {set_knob_label($Rate_knob, ($free_knob / 1000) & "." & (($free_knob mod 1000) / 100) & "" & (($free_knob mod 100) / 10) & "" & (($free_knob mod 10)))}
+  else
+    $sync_knob := ($Rate_knob * 18) / 1000001
+    {set_knob_label($Rate_knob, !tempo_names[$sync_knob])}
+  end if
+
+end on
